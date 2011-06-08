@@ -8,40 +8,29 @@ package com.blazingcontacts.BlazingContacts;
  */
 public class Contact {
 
-	private String firstName, lastName, phoneNumber, email;
+	private String name, phoneNumber, email;
 
 	/**
 	 * Creates a new Contact.
 	 * 
-	 * @param firstName
-	 *            - the first name of the Contact.
-	 * @param lastName
-	 *            - the last name of the Contact.
+	 * @param name
+	 *            - the name of the Contact.
 	 * @param phoneNumber
 	 *            - the phone number of the Contact.
 	 * @param email
 	 *            - the email address of the Contact.
 	 */
-	public Contact(String firstName, String lastName, String phoneNumber,
-			String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+	public Contact(String name, String phoneNumber, String email) {
+		this.name = name;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 	}
 
 	/**
-	 * @return the first name of this Contact
+	 * @return the name of this Contact
 	 */
-	public String getFirstName() {
-		return firstName;
-	}
-
-	/**
-	 * @return the last name of this Contact
-	 */
-	public String getLastName() {
-		return lastName;
+	public String getName() {
+		return name;
 	}
 
 	/**
