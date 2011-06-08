@@ -3,7 +3,6 @@ package com.blazingcontacts.BlazingContacts;
 import java.util.ArrayList;
 
 import android.content.ContentProviderOperation;
-import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.OperationApplicationException;
 import android.os.RemoteException;
@@ -56,7 +55,6 @@ public class ContactsProviderWrapper {
 				.withValue(Email.TYPE, Email.TYPE_HOME).build()); // The email
 																	// field
 
-		ContentProviderResult[] cpr = contactResolver.applyBatch(
-				ContactsContract.AUTHORITY, ops);
+		contactResolver.applyBatch(ContactsContract.AUTHORITY, ops);
 	}
 }
