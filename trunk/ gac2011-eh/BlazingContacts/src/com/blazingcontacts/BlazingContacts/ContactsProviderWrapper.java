@@ -2,8 +2,8 @@ package com.blazingcontacts.BlazingContacts;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.ContentProviderOperation;
-import android.content.ContentResolver;
 import android.content.OperationApplicationException;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
@@ -13,12 +13,14 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 
 public class ContactsProviderWrapper {
 
-	private ContentResolver contactResolver;
-	private int accountType;
+	private static final int PICK_CONTACT = 3;
 
-	public ContactsProviderWrapper(ContentResolver resolver, int accountType) {
-		contactResolver = resolver;
+	private int accountType;
+	private Activity parent;
+
+	public ContactsProviderWrapper(Activity parent, int accountType) {
 		this.accountType = accountType;
+		this.parent = parent;
 	}
 
 	public void addContact(Contact newContact)
@@ -55,6 +57,7 @@ public class ContactsProviderWrapper {
 				.withValue(Email.TYPE, Email.TYPE_HOME).build()); // The email
 																	// field
 
-		contactResolver.applyBatch(ContactsContract.AUTHORITY, ops);
+		parent.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
 	}
+
 }
