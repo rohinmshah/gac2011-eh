@@ -4,9 +4,15 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView  
+<!--  <TextView  
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
     android:text="@string/hello"
-    />
+    /> -->
+    
+	<TableLayout android:layout_width="fill_parent" android:id="@+id/tableLayout1" android:layout_height="wrap_content">
+	    <ImageView android:src="@drawable/icon" android:layout_width="wrap_content" android:id="@+id/imageView1" android:layout_height="fill_parent" android:layout_gravity="center_horizontal|bottom"></ImageView>
+	    <Button android:gravity="center" android:id="@+id/startButton" android:text="Start Session" android:layout_height="fill_parent" android:textSize="11pt"></Button>
+	    <Button android:layout_width="wrap_content" android:id="@+id/joinButton" android:text="Join Session" android:layout_height="fill_parent" android:textSize="11pt"></Button>
+	</TableLayout> 
 </LinearLayout>
