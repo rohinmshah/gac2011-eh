@@ -11,6 +11,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 
+/**
+ * Simple service to poll the group status and download contact information
+ * at end of group lifetime
+ */
 public class ContactDownloadService extends Service {
 
 	private static final int NOTIFICATION_ID = 1;
@@ -26,12 +30,23 @@ public class ContactDownloadService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		
+		int maxPeople;
+		int type;
+		String groupName;
+		String password;
+		Bundle extras;
+		
+		
+		// Create new notification
 		mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		int icon = android.R.drawable.stat_notify_sync;
 		CharSequence text = "Starting BlazingContact Download Counter";
 		long when = System.currentTimeMillis();
 		notification = new Notification(icon, text, when);
 
+		// Fill in notification content
+		// TODO: string constants
 		CharSequence contentTitle = "BlazingContacts Status";
 		CharSequence contentText = "Starting the counter";
 		Intent notificationIntent = new Intent(this,
@@ -41,19 +56,30 @@ public class ContactDownloadService extends Service {
 		notification.setLatestEventInfo(getApplicationContext(), contentTitle,
 				contentText, contentIntent);
 
+		// Show notification
 		mManager.notify(NOTIFICATION_ID, notification);
+		
+		// TODO *URGENT*: This isolates testing to notification
 		stopSelf();
 
-		Bundle extras = intent.getExtras();
-		int type = extras.getInt(GroupActivity.GROUP_TYPE);
-		String groupName = extras.getString(GroupActivity.GROUP_NAME);
-		String password = "blank";
+		// Unbundle group name
+		// TODO: password
+		extras = intent.getExtras();
+		type = extras.getInt(GroupActivity.GROUP_TYPE);
+		groupName = extras.getString(GroupActivity.GROUP_NAME);
+		password = "blank";
+		
+		// Create Contact structure for uploading to server
 		Contact user = new Contact(extras.getString(GroupActivity.MY_NAME),
 				extras.getString(GroupActivity.MY_PHONE_NUMBER),
 				extras.getString(GroupActivity.MY_EMAIL));
+		
+		// Calculate expiration time
 		Date time = WebWrapper.getDateFromNow(extras
 				.getLong(StartActivity.LIFETIME_MILLIS));
-		int maxPeople = extras.getInt(StartActivity.MAX_PEOPLE);
+		
+		// Get maximum number of users for group
+		maxPeople = extras.getInt(StartActivity.MAX_PEOPLE);
 		switch (type) {
 		case GroupActivity.TYPE_START:
 			try {
@@ -66,6 +92,7 @@ public class ContactDownloadService extends Service {
 		case GroupActivity.TYPE_JOIN:
 			break;
 		}
+		
 		return 1;
 	}
 }

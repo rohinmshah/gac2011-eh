@@ -11,6 +11,9 @@ import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 
+/**
+ * Simplified interface to the Android native contacts provider
+ */
 public class ContactsProviderWrapper {
 
 	private static final int PICK_CONTACT = 3;
@@ -18,13 +21,22 @@ public class ContactsProviderWrapper {
 	private int accountType;
 	private Activity parent;
 
+	/**
+	 * @param parent The activity this wrapper is operating under
+	 * @param accountType The account type as defined by Android
+	 */
 	public ContactsProviderWrapper(Activity parent, int accountType) {
 		this.accountType = accountType;
 		this.parent = parent;
 	}
 
-	public void addContact(Contact newContact)
-			throws OperationApplicationException, RemoteException {
+	/**
+	 * Adds a new contact to the system's collection of contact information
+	 * @param newContact Structure containing the new contact information
+	 * @throws OperationApplicationException
+	 * @throws RemoteException
+	 */
+	public void addContact(Contact newContact) throws OperationApplicationException, RemoteException {
 		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 		ops.add(ContentProviderOperation
 				.newInsert(ContactsContract.RawContacts.CONTENT_URI)
