@@ -1,10 +1,10 @@
 package com.blazingcontacts.BlazingContacts;
 
+import org.json.JSONObject;
+
 /**
+ * Contact with general personal information
  * @author Rohin
- * 
- *         Represents a Contact, which could be the user.
- * 
  */
 public class Contact {
 
@@ -45,6 +45,15 @@ public class Contact {
 	 */
 	public String getEmail() {
 		return email;
+	}
+
+	/**
+	 * Returns a JSON encoded version of this contact
+	 * @return A JSONObject representation of this object
+	 */
+	public JSONObject toJSON() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
