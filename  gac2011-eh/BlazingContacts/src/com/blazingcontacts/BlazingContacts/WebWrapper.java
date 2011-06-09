@@ -53,6 +53,8 @@ public class WebWrapper {
 	private static final String JSON_CONTACTS_ATTRIBUTE = "";
 	private static final String JSON_RESULT = "result";
 	
+	public static final int NO_GROUP_MAX = -1;
+	
 	private String groupName;
 	private String password;
 	private Mode mode;
