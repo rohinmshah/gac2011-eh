@@ -22,10 +22,13 @@ public abstract class GroupActivity extends Activity {
 
 	private static final int PICK_CONTACT = 3;
 
-	public static String GROUP_NAME = "Group Name";
-	public static String GROUP_TYPE = "Group Type";
-	public static int TYPE_START = 0;
-	public static int TYPE_JOIN = 1;
+	public static final String MY_NAME = "My Name";
+	public static final String MY_PHONE_NUMBER = "My Phone Number";
+	public static final String MY_EMAIL = "My Email";
+	public static final String GROUP_NAME = "Group Name";
+	public static final String GROUP_TYPE = "Group Type";
+	public static final int TYPE_START = 0;
+	public static final int TYPE_JOIN = 1;
 
 	/**
 	 * The onClickListener method for a Button which sets its onClick tag to
