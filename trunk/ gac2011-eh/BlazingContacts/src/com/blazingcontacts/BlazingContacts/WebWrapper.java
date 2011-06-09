@@ -51,10 +51,13 @@ public class WebWrapper {
 	private static final String JSON_DATE_ATTRIBUTE = "expiration";
 	private static final String JSON_GROUP_MAX_ATTRIBUTE = "max_members";
 	private static final String JSON_MEMBER_COUNT_ATTRIBUTE = "member_count";
-	private static final String JSON_CONTACTS_ATTRIBUTE = "";
+	private static final String JSON_CONTACTS_ATTRIBUTE = "contacts";
+	private static final String JSON_ERROR_NUM_ATTRIBUTE = "error";
+	private static final String JSON_ERROR_MESSAGE_ATTRIBUTE = "error_message";
 	private static final String JSON_RESULT = "result";
 	
 	public static final int NO_GROUP_MAX = -1;
+	private static final int NO_ERROR = 0;
 	
 	private String groupName;
 	private String password;
@@ -70,8 +73,9 @@ public class WebWrapper {
 	 * @throws IOException 
 	 * @throws URISyntaxException 
 	 * @throws ClientProtocolException 
+	 * @throws ServerException 
 	 */
-	public WebWrapper(String newGroupName, String newPassword, Contact newContact) throws ClientProtocolException, URISyntaxException, IOException, JSONException
+	public WebWrapper(String newGroupName, String newPassword, Contact newContact) throws ClientProtocolException, URISyntaxException, IOException, JSONException, ServerException
 	{
 		// Save simple attributes
 		mode = Mode.JOINED_GROUP;
@@ -94,8 +98,9 @@ public class WebWrapper {
 	 * @throws IOException 
 	 * @throws URISyntaxException 
 	 * @throws ClientProtocolException 
+	 * @throws ServerException 
 	 */
-	public WebWrapper(String newGroupName, String newPassword, Contact newContact, Date expiration, int groupMax) throws ClientProtocolException, URISyntaxException, IOException, JSONException
+	public WebWrapper(String newGroupName, String newPassword, Contact newContact, Date expiration, int groupMax) throws ClientProtocolException, URISyntaxException, IOException, JSONException, ServerException
 	{
 		ArrayList<NameValuePair> parameters;
 		
@@ -125,8 +130,9 @@ public class WebWrapper {
 	 * @throws URISyntaxException 
 	 * @throws ClientProtocolException 
 	 * @throws ParseException 
+	 * @throws ServerException 
 	 */
-	public GroupStatus getStatus() throws ClientProtocolException, URISyntaxException, IOException, JSONException, ParseException
+	public GroupStatus getStatus() throws ClientProtocolException, URISyntaxException, IOException, JSONException, ParseException, ServerException
 	{
 		String isoExpirationDate;
 		Date expiration;
@@ -168,8 +174,9 @@ public class WebWrapper {
 	 * @throws IOException 
 	 * @throws URISyntaxException 
 	 * @throws ClientProtocolException 
+	 * @throws ServerException 
 	 */
-	public Contact[] downloadContactInfo() throws ClientProtocolException, URISyntaxException, IOException, JSONException
+	public Contact[] downloadContactInfo() throws ClientProtocolException, URISyntaxException, IOException, JSONException, ServerException
 	{
 		JSONObject result;
 		JSONArray jsonContactList;
@@ -195,8 +202,9 @@ public class WebWrapper {
 	 * @throws IOException 
 	 * @throws URISyntaxException 
 	 * @throws ClientProtocolException 
+	 * @throws ServerException 
 	 */
-	private void addContactInfo(Contact info) throws ClientProtocolException, URISyntaxException, IOException, JSONException
+	private void addContactInfo(Contact info) throws ClientProtocolException, URISyntaxException, IOException, JSONException, ServerException
 	{
 		// Create parameters
 		ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>(3);
@@ -217,8 +225,9 @@ public class WebWrapper {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 * @throws JSONException
+	 * @throws ServerException 
 	 */
-	private JSONObject executeRequest(String resource, HttpMethod method, List<NameValuePair> parameters) throws URISyntaxException, ClientProtocolException, IOException, JSONException
+	private JSONObject executeRequest(String resource, HttpMethod method, List<NameValuePair> parameters) throws URISyntaxException, ClientProtocolException, IOException, JSONException, ServerException
 	{
 		HttpRequestBase request;
 		HttpResponse response;
@@ -242,7 +251,9 @@ public class WebWrapper {
 		jsonContent = readResults(response);
 		result = new JSONObject(jsonContent);
 		
-		// TODO Check for errors
+		// Check for errors
+		if (result.getInt(JSON_ERROR_NUM_ATTRIBUTE) != NO_ERROR)
+			throw new ServerException(result.getString(JSON_ERROR_MESSAGE_ATTRIBUTE));
 		
 		return result.getJSONObject(JSON_RESULT);
 	}
