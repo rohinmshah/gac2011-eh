@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -87,7 +88,7 @@ public class WebWrapper {
 	 * @param newGroupName The name of the group to join
 	 * @param newPassword The password to use
 	 * @param newContact The local user's self-selected contact information
-	 * @param expiration The time after which the group will be deleted
+	 * @param expiration The Date after which the group will be deleted (set in user timezone)
 	 * @param groupMax The maximum number of people allowed in the group
 	 * @throws JSONException 
 	 * @throws IOException 
@@ -117,7 +118,7 @@ public class WebWrapper {
 	}
 	
 	/**
-	 * Requests the status of the current group
+	 * Requests the status of the current group with dates encoded for the user's timezone
 	 * @return A GroupStatus corresponding to this WebWrapper's group
 	 * @throws JSONException 
 	 * @throws IOException 
@@ -315,6 +316,7 @@ public class WebWrapper {
 	private Date isoStringToDate(String target) throws ParseException
 	{
 		SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
+		formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 		return formatter.parse(target);
 	}
 	
@@ -325,7 +327,8 @@ public class WebWrapper {
 	 */
 	public static Date getDateFromNow(long milliseconds)
 	{
-		long totalMilliSec = (new Date()).getTime() + milliseconds;
+		Date now = new Date();
+		long totalMilliSec = now.getTime() + milliseconds;
 		return new Date(totalMilliSec);
 	}
 }
