@@ -321,7 +321,7 @@ public class WebWrapper {
 	 * @param milliseconds The number of milliseconds to offset by
 	 * @return A new Date object that represents the time a given number of milliseconds from now
 	 */
-	public Date getDateFromNow(long milliseconds)
+	public static Date getDateFromNow(long milliseconds)
 	{
 		long totalMilliSec = (new Date()).getTime() + milliseconds;
 		return new Date(totalMilliSec);
