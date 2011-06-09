@@ -20,7 +20,7 @@ public class WebTestWrapper {
 
 	public GroupStatus getStatus() {
 		remainingTime -= 1000;
-		if (Math.random() > 0.2) {
+		if (Math.random() > 0.8) {
 			members++;
 		}
 		return new GroupStatus(new Date(remainingTime), groupMax, members);
