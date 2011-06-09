@@ -315,4 +315,15 @@ public class WebWrapper {
 		SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
 		return formatter.parse(target);
 	}
+	
+	/**
+	 * Determines the Date that is the number of given milliseconds from now
+	 * @param milliseconds The number of milliseconds to offset by
+	 * @return A new Date object that represents the time a given number of milliseconds from now
+	 */
+	public Date getDateFromNow(long milliseconds)
+	{
+		long totalMilliSec = (new Date()).getTime() + milliseconds;
+		return new Date(totalMilliSec);
+	}
 }
