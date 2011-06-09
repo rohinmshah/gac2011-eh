@@ -2,7 +2,9 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
-  android:layout_height="fill_parent" android:orientation="vertical">
+  android:layout_height="fill_parent" android:orientation="vertical"
+  android:gravity="center|center_horizontal"
+  >
 
     <!-- xmlns:android="http://schemas.android.com/apk/res/android" -->
 <!--    <TableLayout 
@@ -21,41 +23,43 @@
             android:padding="3dip" />
     </TableRow> 
 </TableLayout> -->
-<TableLayout android:layout_width="fill_parent" android:id="@+id/contactsInfo" android:layout_height="wrap_content">
-    <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow1" >
-        <TextView android:text="Group Name:" android:id="@+id/groupNameLabel" android:textSize="9pt" android:layout_height="wrap_content" android:layout_width="fill_parent"></TextView>
-        <EditText android:layout_height="wrap_content" android:id="@+id/groupName" android:hint="Insert Name Here" android:gravity="right" android:width="80dip" android:layout_width="fill_parent"></EditText>
-    </TableRow>
-    <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow2" >
-   		<TextView android:text="Your Info:" android:id="@+id/yourInfoLabel" android:textSize="9pt" android:layout_height="wrap_content" android:layout_width="fill_parent"></TextView>
-   		<Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/chooseContact" android:text="Choose Contact" android:textSize="7pt" android:onClick="onChooseContactClick"></Button>
- 	 </TableRow>
- 	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow4" android:gravity="center">
- 		<TextView android:hint="Name:" android:id="@+id/nameCB" android:textSize="9pt" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_gravity="center_horizontal"></TextView>
- 	</TableRow>
- 	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow3" android:gravity="center">
- 		<CheckBox android:layout_width="wrap_content" android:hint="Phone Number" android:layout_height="wrap_content" android:id="@+id/phoneNumberCB" android:checked="true"></CheckBox>
-	</TableRow>
-	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow5" android:gravity="center">
-		<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="Email" android:id="@+id/emailCB" android:checked="true"></CheckBox>
-	</TableRow>
-	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow6" >
-        <TextView android:text="Wait For:" android:id="@+id/waitForLabel" android:textSize="9pt" android:layout_height="wrap_content" android:layout_width="fill_parent"></TextView>
-    </TableRow>   
-   	<TableRow  android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow7" android:gravity="center">
-     <EditText android:layout_height="wrap_content" android:id="@+id/timeToWaitFor" android:text="" android:gravity="right" android:width="3dip" android:layout_width="fill_parent"></EditText>
-  		<Spinner android:layout_width="fill_parent" android:id="@+id/timeSpinner" android:layout_height="wrap_content">
-  		</Spinner>
-    </TableRow>
-    <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow8" android:gravity="center|center_horizontal">
-        <TextView android:layout_width="wrap_content" android:text="Or" android:id="@+id/groupNameLabel" android:layout_height="wrap_content" android:textSize="8pt"></TextView>
-	</TableRow>
-	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow9" android:gravity="center_horizontal">
-         <EditText android:layout_height="wrap_content" android:id="@+id/peopleToWaitFor" android:text="" android:padding="3dip" android:width="20dip" android:layout_width="fill_parent" android:gravity="center|center_horizontal"></EditText>
-         <TextView android:text="people" android:id="@+id/peopleWaitForLabel" android:textSize="9pt" android:layout_height="wrap_content" android:layout_width="fill_parent"></TextView>
-    </TableRow>
-    <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow10" android:gravity="center_horizontal">
-        <Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/start_begin" android:text="Start!" android:textSize="12pt"></Button>
- 	 </TableRow>
-</TableLayout>
+	<TableLayout android:layout_width="fill_parent" android:id="@+id/contacts_info" android:layout_height="fill_parent" android:paddingTop="270dp" >
+	    <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow1" android:gravity="center_horizontal">
+	        <TextView android:text="Group Name: " android:id="@+id/groupNameLabel" android:textSize="30dp" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
+	        <EditText android:layout_height="wrap_content" android:id="@+id/groupName" android:hint="Enter Name Here  " android:layout_width="wrap_content" android:width="350dp" ></EditText>
+	    </TableRow>
+	    <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow2" android:gravity="center_horizontal">
+	   		<TextView android:text="Your Info:" android:id="@+id/yourInfoLabel" android:textSize="30dp" android:width="50dp" android:layout_height="wrap_content" android:layout_width="fill_parent"></TextView>
+	 <!--   	</TableRow>
+	   	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow11" > -->
+	   		<Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/chooseContact" android:text="Choose Your Contact" android:textSize="30dp" android:onClick="onChooseContactClick"></Button>
+	 	 </TableRow>
+	 	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow4" android:gravity="center">
+	 		<TextView android:hint="Name:" android:id="@+id/nameCB" android:textSize="30dp" android:paddingTop="45dp" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_gravity="center_horizontal"></TextView>
+	 	</TableRow>
+	 	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow3" android:gravity="center">
+	 		<CheckBox android:layout_width="wrap_content" android:hint="Phone Number" android:layout_height="wrap_content" android:id="@+id/phoneNumberCB" android:checked="true" android:textSize="30dp"></CheckBox>
+		</TableRow>
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow5" android:gravity="center">
+			<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="Email" android:id="@+id/emailCB" android:checked="true" android:textSize="30dp"></CheckBox>
+		</TableRow>
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow6" >
+	        <TextView android:text="Wait For:" android:paddingTop="45dp" android:id="@+id/waitForLabel" android:textSize="30dp" android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center_horizontal" ></TextView>
+	   <!--  </TableRow>   
+	   	<TableRow  android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow7" android:gravity="center"> -->
+	     <EditText android:layout_height="wrap_content" android:id="@+id/timeToWaitFor" android:text=" " android:gravity="center" android:layout_width="fill_parent" android:width="20dp"></EditText>
+	  		<Spinner android:layout_width="wrap_content" android:id="@+id/timeSpinner" android:layout_height="wrap_content" android:width="20dp">
+	  		</Spinner>
+	    </TableRow>
+	    <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow8" android:gravity="center">
+	        <TextView android:layout_width="wrap_content" android:text="OR" android:id="@+id/groupNameLabel" android:layout_height="wrap_content" android:textSize="15dp"></TextView>
+		</TableRow>
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow9" android:gravity="center_horizontal" android:width="20dp">
+	         <EditText android:layout_height="wrap_content" android:id="@+id/peopleToWaitFor" android:text="" android:padding="3dip" android:width="30dp" android:layout_width="fill_parent" android:gravity="center"></EditText>
+	         <TextView android:text="people" android:id="@+id/peopleWaitForLabel" android:textSize="30dp" android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center"></TextView>
+	    </TableRow>
+	    <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tableRow10" android:gravity="center_horizontal">
+	        <Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/start_begin" android:text="Start!" android:textSize="30dp"></Button>
+	 	 </TableRow>
+	</TableLayout>
 </LinearLayout>
