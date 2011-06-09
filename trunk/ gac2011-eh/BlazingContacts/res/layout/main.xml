@@ -10,9 +10,17 @@
     android:text="@string/hello"
     /> -->
     
-	<TableLayout android:layout_width="fill_parent" android:id="@+id/tableLayout1" android:layout_height="wrap_content">
-	    <ImageView android:src="@drawable/icon" android:layout_width="wrap_content" android:id="@+id/imageView1" android:layout_height="fill_parent" android:layout_gravity="center_horizontal|bottom"></ImageView>
-	    <Button android:gravity="center" android:id="@+id/startButton" android:text="Start Session" android:layout_height="fill_parent" android:textSize="11pt"></Button>
-	    <Button android:layout_width="wrap_content" android:id="@+id/joinButton" android:text="Join Session" android:layout_height="fill_parent" android:textSize="11pt"></Button>
+	<TableLayout android:layout_width="fill_parent" android:id="@+id/tableLayout1" android:layout_height="fill_parent" android:gravity="center" >
+	 	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center">
+	    	<ImageView android:src="@drawable/logo_bg2" android:layout_height="550dp" android:layout_width="wrap_content" android:id="@+id/imageView1" android:layout_weight="1" android:layout_gravity="center_horizontal" ></ImageView>
+	    </TableRow>
+	    	  
+	    <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center" android:paddingTop="20dp">
+	   		 <Button android:gravity="center" android:id="@+id/startButton" android:text="Start Session" android:layout_height="fill_parent" android:textSize="35dp" ></Button>
+	  	 </TableRow>
+	   
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center" android:paddingTop="10dp">
+	 	   <Button android:gravity="center" android:id="@+id/joinButton" android:text="Join Session" android:layout_height="fill_parent" android:textSize="35dp"></Button>
+		</TableRow>
 	</TableLayout> 
 </LinearLayout>
