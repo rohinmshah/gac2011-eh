@@ -8,7 +8,7 @@ import org.json.JSONObject;
  * @author Rohin
  */
 public class Contact {
-
+ 
 	private static final String JSON_NAME_ATTRIBUTE = "name";
 	private static final String JSON_PHONE_ATTRIBUTE = "phone";
 	private static final String JSON_EMAIL_ATTRIBUTE = "email";

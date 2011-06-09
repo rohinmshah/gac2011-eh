@@ -59,6 +59,16 @@ class Group(JSONSerializable):
 		query.filter('name = ', name)
 		return query.get()
 	
+	def delete(self):
+		""" Deletes this group and all related contacts """
+		
+		# Clear out contacts
+		for contact in self.get_contacts():
+			contact.delete()
+		
+		# Delete group
+		Group.delete(self)
+	
 	def as_dict(self):
 		""" Returns a dictionary representation of this group
 		
@@ -93,6 +103,12 @@ class Group(JSONSerializable):
 	def check_password(self, plaintext): 
 		""" Returns true if the password is correct """
 		return self.__encrypt(plaintext, self.salt) == self.crypted_password 
+	
+	def expired(self):
+		""" Returns true if this group information is no longer needed
+		
+		Returns true if the number of downloads equals the number of people in the group and the maximum group member count or if the current time execeeds that of the expiration time"""
+		return (self.max_members == self.current_users and self.max_members == self.current_users) or self.expiration < datetime.datetime.now()
 
 class Contact(JSONSerializable):
 	""" Model to contain information about a BlazingContacts client """

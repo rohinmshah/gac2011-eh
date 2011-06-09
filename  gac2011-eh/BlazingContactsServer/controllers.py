@@ -68,10 +68,15 @@ class GroupDownloadController(JSONController):
 			
 		# Update download count
 		group.times_downloaded = group.times_downloaded + 1
+		group.put()
 		
 		# Get all group members and render
 		response = map(models.Contact.as_dict, group.get_contacts())
 		self.render_json({"contacts" : response}, require_serialization = False)
+		
+		# Check to see if the group has expired
+		if group.expired():
+			group.delete()
 
 class GroupController(JSONController):
 	""" Responds to queries regarding a group """
@@ -282,10 +287,20 @@ class ContactController(JSONController):
 	#def delete(self):
 	#	pass
 	
+ # TODO: Cron job
+class CleanUpController(webapp.RequestHandler):
+	""" Removes all expired groups """
+	
+	def get(self):
+		for group in models.Group.all():
+			if group.expired(): group.delete()
+		self.response.out.write("Database cleaned")
+	
 def main():
 	application = webapp.WSGIApplication([
 		('/group/download', GroupDownloadController),
 		('/group', GroupController),
+		('/clean', CleanUpController),
 		('/contact', ContactController)], debug=True)
 	util.run_wsgi_app(application)
 
