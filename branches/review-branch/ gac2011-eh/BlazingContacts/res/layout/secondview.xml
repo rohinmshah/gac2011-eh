@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content" android:orientation="vertical"
+  android:gravity="center|center_horizontal"
+  >
+
+	<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<TableLayout android:layout_width="fill_parent" android:id="@+id/contacts_info" android:layout_height="wrap_content" >	 
+		 <TableRow android:paddingTop="10dp">
+				<ImageView android:src="@drawable/logo_add" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/imageView3"  ></ImageView>
+				<TextView android:textSize="18pt" android:text="Create Group" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
+		 </TableRow>
+		<TableRow android:paddingTop="30dp">
+		        <TextView android:textSize="9pt" android:text="Group Name: " android:id="@+id/groupNameLabel" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
+		        <EditText android:layout_height="wrap_content" android:id="@+id/groupName" android:hint="Enter Name Here  " android:layout_width="wrap_content" ></EditText>
+		    </TableRow>
+		    <TableRow android:paddingTop="30dp">
+		   		<TextView android:text="Your Info:" android:id="@+id/yourInfoLabel" android:layout_height="wrap_content" android:layout_width="fill_parent" android:textSize="9pt" ></TextView>
+		 		<LinearLayout android:orientation="vertical">
+		 			<Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/chooseContact" android:text="Choose Your Contact" android:onClick="onChooseContactClick" android:textSize="9pt"></Button>
+		 			<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center"></TextView>
+			 		<TextView android:hint="Name:" android:id="@+id/nameCB" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_gravity="center_horizontal"></TextView>
+				 	<CheckBox android:layout_width="wrap_content" android:hint="Phone Number" android:layout_height="wrap_content" android:id="@+id/phoneNumberCB" android:checked="true"></CheckBox>
+					<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="Email" android:id="@+id/emailCB" android:checked="true"></CheckBox>
+				</LinearLayout>
+			</TableRow>
+			<TableRow android:paddingTop="30dp">
+		        <TextView android:textSize="9pt" android:text="Wait For:" android:id="@+id/waitForLabel" android:layout_height="wrap_content" android:layout_width="fill_parent"></TextView>
+		   		<TableLayout>
+			   		<TableRow>
+				   		<EditText android:maxLength="3" android:inputType="number" android:layout_height="wrap_content" android:id="@+id/timeToWaitFor" android:text="" android:gravity="center" android:layout_width="200dp"></EditText>
+					  	<Spinner android:layout_width="wrap_content" android:id="@+id/timeSpinner" android:layout_height="wrap_content"></Spinner>
+		    		</TableRow>
+		    		<TableRow>
+		    			<TextView android:layout_width="wrap_content" android:text="OR" android:id="@+id/groupNameLabel" android:layout_height="wrap_content"></TextView>
+					</TableRow>
+					<TableRow>
+						<EditText android:maxLength="3" android:inputType="number" android:id="@+id/peopleToWaitFor" android:text="" android:padding="3dip" android:layout_width="200dp" android:gravity="center"></EditText>
+				        <TextView android:text="people" android:id="@+id/peopleWaitForLabel" android:layout_height="wrap_content" android:layout_width="wrap_content" android:gravity="center"></TextView>
+		    	 	</TableRow>
+		    	 </TableLayout>
+		    </TableRow>
+		    <TableRow android:paddingTop="30dp">
+		    	<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center"></TextView>
+		    	<Button android:textSize="12pt" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/start_begin" android:text="Start!"></Button>
+		    </TableRow>
+		</TableLayout>
+	</LinearLayout>
+</ScrollView>

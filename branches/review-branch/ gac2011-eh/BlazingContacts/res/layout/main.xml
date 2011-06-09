@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent">
+	<ImageView android:src="@drawable/logo_bg2" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/imageView1" android:layout_weight="1.6" android:layout_gravity="center_horizontal" ></ImageView>
+	<Button android:width="320dp" android:gravity="center" android:id="@+id/startButton" android:text="Start Session" android:layout_height="wrap_content" android:layout_width="wrap_content" android:textSize="25dp" android:layout_gravity="center_horizontal"></Button>
+	<Button android:width="320dp" android:gravity="center" android:id="@+id/joinButton" android:text="Join Session" android:layout_height="wrap_content" android:layout_width="wrap_content" android:textSize="25dp" android:layout_gravity="center_horizontal"></Button>
+	<TextView android:layout_weight="1" android:layout_height="wrap_content" android:layout_width="wrap_content" android:textSize="50dp" android:layout_gravity="center"></TextView>
+</LinearLayout>
