@@ -34,6 +34,15 @@ public class JoinActivity extends GroupActivity {
 				i.putExtra(GROUP_NAME,
 						((EditText) findViewById(R.id.groupName)).getText()
 								.toString());
+				String name = ((TextView) findViewById(R.id.nameCB)).getText()
+						.toString();
+				String phone = ((TextView) findViewById(R.id.phoneNumberCB))
+						.getText().toString();
+				String email = ((TextView) findViewById(R.id.emailCB))
+						.getText().toString();
+				i.putExtra(MY_NAME, name);
+				i.putExtra(MY_PHONE_NUMBER, phone);
+				i.putExtra(MY_EMAIL, email);
 				startService(i);
 				finish();
 			}
