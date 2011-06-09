@@ -56,6 +56,7 @@ public class StartActivity extends GroupActivity {
 	 */
 	@Override
 	protected void populateContact(String name, String phoneNumber, String email) {
+		TextView t = (TextView) findViewById(R.id.nameCB);
 		((TextView) findViewById(R.id.nameCB)).setText(name);
 		((TextView) findViewById(R.id.phoneNumberCB)).setText(phoneNumber);
 		((TextView) findViewById(R.id.emailCB)).setText(email);
