@@ -13,11 +13,10 @@ public class ContactDownloadAsyncTask extends
 		AsyncTask<Intent, GroupStatus, Void> {
 
 	private ContactDownloadService mService;
-	private WebWrapper mWrapper;
+	private WebTestWrapper mWrapper;
 	private GroupStatus mStatus;
 	private Notification mNotification;
 	private NotificationManager mManager;
-	private PendingIntent contentIntent;
 	private int mType;
 
 	public ContactDownloadAsyncTask(ContactDownloadService service,
@@ -30,6 +29,10 @@ public class ContactDownloadAsyncTask extends
 	@Override
 	protected Void doInBackground(Intent... params) {
 		CharSequence contentTitle, contentText;
+		Intent notificationIntent = new Intent(mService,
+				ContactDownloadService.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(
+				mService.getApplicationContext(), 0, notificationIntent, 0);
 
 		Intent intent = params[0];
 		Bundle extras = intent.getExtras();
@@ -47,7 +50,7 @@ public class ContactDownloadAsyncTask extends
 				Date time = WebWrapper.getDateFromNow(extras
 						.getLong(StartActivity.LIFETIME_MILLIS));
 				int maxPeople = extras.getInt(StartActivity.MAX_PEOPLE);
-				mWrapper = new WebWrapper(groupName, password, user, time,
+				mWrapper = new WebTestWrapper(groupName, password, user, time,
 						maxPeople);
 			} catch (Exception e) {
 				contentTitle = "Connection failed";
@@ -57,12 +60,13 @@ public class ContactDownloadAsyncTask extends
 						contentText, contentIntent);
 				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 						mNotification);
+				return null;
 			}
 			break;
 
 		case GroupActivity.TYPE_JOIN:
 			try {
-				mWrapper = new WebWrapper(groupName, password, user);
+				mWrapper = new WebTestWrapper(groupName, password, user);
 			} catch (Exception e) {
 				contentTitle = "Connection failed";
 				contentText = "Could not connect to the server.  Aborting.";
@@ -71,6 +75,7 @@ public class ContactDownloadAsyncTask extends
 						contentText, contentIntent);
 				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 						mNotification);
+				return null;
 			}
 			break;
 		}
@@ -80,6 +85,10 @@ public class ContactDownloadAsyncTask extends
 
 	private void askForStatusLoop() {
 		CharSequence contentTitle = "", contentText = "";
+		Intent notificationIntent = new Intent(mService,
+				ContactDownloadService.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(
+				mService.getApplicationContext(), 0, notificationIntent, 0);
 		try {
 			Thread.sleep(1000);
 			mStatus = mWrapper.getStatus();
@@ -104,8 +113,10 @@ public class ContactDownloadAsyncTask extends
 					mNotification);
 		} catch (Exception e) {
 			contentTitle = "Web service problem";
-			contentText = "Error occurred while accessing the group.  Aborting.\nDetails: "
-					+ e.getMessage();
+			contentText = e.getMessage();
+			if (contentText == null || contentText.equals("")) {
+				contentText = "Unknown error";
+			}
 			mNotification.setLatestEventInfo(mService.getApplicationContext(),
 					contentTitle, contentText, contentIntent);
 			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
@@ -116,23 +127,32 @@ public class ContactDownloadAsyncTask extends
 
 	@Override
 	protected void onProgressUpdate(GroupStatus... values) {
-		CharSequence contentTitle = "Progress Update";
-		CharSequence contentText = "";
+		CharSequence contentTitle = "Progress Update", contentText = "";
+		Intent notificationIntent = new Intent(mService,
+				ContactDownloadService.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(
+				mService.getApplicationContext(), 0, notificationIntent, 0);
+
 		if (values[0].isFinished()) {
 			contentTitle = "Finished!";
 			contentText = values[0].getMemberCount()
 					+ " contacts were added to your Contacts";
+			mNotification.setLatestEventInfo(mService.getApplicationContext(),
+					contentTitle, contentText, contentIntent);
+			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
+					mNotification);
 		} else {
 			long milliseconds = values[0].getRemainingTime().getTime() / 1000;
-			contentText = "Time left: " + milliseconds;
+			contentText = "Time: " + milliseconds;
 			if (values[0].getGroupMax() != WebWrapper.NO_GROUP_MAX) {
 				contentText = contentText
-						+ "\nNumber of people left: "
+						+ "People: "
 						+ (values[0].getGroupMax() - values[0].getMemberCount());
 			}
+			mNotification.setLatestEventInfo(mService.getApplicationContext(),
+					contentTitle, contentText, contentIntent);
+			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
+					mNotification);
 		}
-		mNotification.setLatestEventInfo(mService.getApplicationContext(),
-				contentTitle, contentText, contentIntent);
-		mManager.notify(ContactDownloadService.NOTIFICATION_ID, mNotification);
 	}
 }

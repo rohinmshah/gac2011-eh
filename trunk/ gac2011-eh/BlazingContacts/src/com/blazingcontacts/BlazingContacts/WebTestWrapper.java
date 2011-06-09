@@ -4,13 +4,13 @@ import java.util.Date;
 
 public class WebTestWrapper {
 
-	private int remainingTime = 30000;
+	private int remainingTime = 20000;
 	private int groupMax;
 	private int members = 0;
 
 	public WebTestWrapper(String newGroupName, String newPassword,
 			Contact newContact) {
-		groupMax = 20;
+		groupMax = WebWrapper.NO_GROUP_MAX;
 	}
 
 	public WebTestWrapper(String newGroupName, String newPassword,
@@ -20,14 +20,18 @@ public class WebTestWrapper {
 
 	public GroupStatus getStatus() {
 		remainingTime -= 1000;
-		if (Math.random() > 0.5) {
+		if (Math.random() > 0.2) {
 			members++;
 		}
 		return new GroupStatus(new Date(remainingTime), groupMax, members);
 	}
 
 	public Contact[] downloadContactInfo() {
-		return new Contact[] { new Contact("Test Name", "(814) 145-1435",
-				"test.name@gmail.com") };
+		Contact[] res = new Contact[members];
+		for (int i = 0; i < members; i++) {
+			res[i] = new Contact("Test" + i + " Name", "(823) 234-2985",
+					"testname@gmail.com");
+		}
+		return res;
 	}
 }

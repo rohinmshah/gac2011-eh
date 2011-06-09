@@ -14,7 +14,7 @@ import android.os.IBinder;
  */
 public class ContactDownloadService extends Service {
 
-	public static final int NOTIFICATION_ID = 1;
+	public static final int NOTIFICATION_ID = 10;
 
 	private Notification mNotification;
 	private NotificationManager mManager;
