@@ -2,8 +2,8 @@ package com.blazingcontacts.BlazingContacts;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.ContentProviderOperation;
+import android.content.Context;
 import android.content.OperationApplicationException;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
@@ -16,27 +16,24 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredName;
  */
 public class ContactsProviderWrapper {
 
-	private static final int PICK_CONTACT = 3;
-
 	private int accountType;
-	private Activity parent;
+	private Context parent;
 
-	/**
-	 * @param parent The activity this wrapper is operating under
-	 * @param accountType The account type as defined by Android
-	 */
-	public ContactsProviderWrapper(Activity parent, int accountType) {
+	public ContactsProviderWrapper(Context parent, int accountType) {
 		this.accountType = accountType;
 		this.parent = parent;
 	}
 
 	/**
 	 * Adds a new contact to the system's collection of contact information
-	 * @param newContact Structure containing the new contact information
+	 * 
+	 * @param newContact
+	 *            Structure containing the new contact information
 	 * @throws OperationApplicationException
 	 * @throws RemoteException
 	 */
-	public void addContact(Contact newContact) throws OperationApplicationException, RemoteException {
+	public void addContact(Contact newContact)
+			throws OperationApplicationException, RemoteException {
 		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 		ops.add(ContentProviderOperation
 				.newInsert(ContactsContract.RawContacts.CONTENT_URI)
