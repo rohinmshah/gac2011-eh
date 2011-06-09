@@ -3,10 +3,10 @@ package com.blazingcontacts.BlazingContacts;
 import java.util.Date;
 
 /**
- * @author Rohin
+ * Represents the status of the group - the remaining time in terms of
+ * time and/or number of people in the group.
  * 
- *         Represents the status of the group - the remaining time in terms of
- *         time and/or number of people in the group.
+ * @author Rohin
  */
 public class GroupStatus {
 
