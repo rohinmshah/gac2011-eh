@@ -92,14 +92,14 @@ class GroupController(JSONController):
 			self.render_json(None, JSONController.BAD_FORM_ERROR_INT, JSONController.BAD_FORM_ERROR_STRING)
 			return
 		
-		# Check authentication
-		if not group.check_password(password):
-			self.render_json(None, JSONController.BAD_PASSWORD_ERROR_INT, JSONController.BAD_PASSWORD_ERROR_STRING)
-			return
-		
 		# Check group exists
 		if group == None:
 			self.render_json(None, JSONController.NO_SUCH_GROUP_ERROR_INT, JSONController.NO_SUCH_GROUP_ERROR_STRING)
+			return
+		
+		# Check authentication
+		if not group.check_password(password):
+			self.render_json(None, JSONController.BAD_PASSWORD_ERROR_INT, JSONController.BAD_PASSWORD_ERROR_STRING)
 			return
 		
 		# Render JSON representation

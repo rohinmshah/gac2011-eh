@@ -38,8 +38,8 @@ public class WebWrapper {
 	
 	public enum Mode {CREATED_GROUP, JOINED_GROUP};
 	public enum HttpMethod {GET, POST, PUT, DELETE};
-	private static final String DEFAULT_HOST = "localhost:8080";
-	private static final String DEFAULT_SCHEME = "http";
+	private static final String DEFAULT_HOST = "blazingcontacts.appspot.com";
+	private static final String DEFAULT_SCHEME = "https";
 	private static final String GROUP_NAME_PARAMETER = "name";
 	private static final String PASSWORD_PARAMETER = "password";
 	private static final String EXPIRATION_PARAMETER = "expiration";
