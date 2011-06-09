@@ -84,7 +84,7 @@ public class StartActivity extends GroupActivity {
 					i.putExtra(MAX_PEOPLE, numberOfPeople);
 				} catch (NumberFormatException e) {
 					Toast.makeText(StartActivity.this,
-							"Time and number of people must be numbers",
+							"Time and Number of People fields must be numbers!",
 							Toast.LENGTH_LONG).show();
 					return;
 				}

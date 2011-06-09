@@ -6,22 +6,27 @@
   android:gravity="center|center_horizontal"
   >
   	 <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
-  	 	 <TextView android:textSize="18pt" android:text="Join Group" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
-		 <TableLayout android:layout_width="fill_parent" android:id="@+id/contactsInfo" android:layout_height="fill_parent">
-		    <TableRow android:paddingTop="50dp">
-		        <TextView android:paddingRight="10dp" android:text="Group Name:" android:id="@+id/groupNameLabel" android:textSize="9pt" android:layout_height="wrap_content" android:layout_width="fill_parent"></TextView>
-		        <EditText android:layout_height="wrap_content" android:id="@+id/groupName" android:hint="Insert name here" android:gravity="right" android:layout_width="fill_parent"></EditText>
+		 <TableLayout android:layout_width="fill_parent" android:id="@+id/contactsInfo" android:layout_height="wrap_content">
+		   <TableRow android:paddingTop="10dp">
+				<ImageView android:src="@drawable/logo_join" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/imageView4"  ></ImageView>
+				<TextView android:textSize="18pt" android:text="Join Group" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
+		 </TableRow>
+		 
+		    <TableRow android:paddingTop="30dp">
+ 				<TextView android:textSize="9pt" android:text="Group Name: " android:id="@+id/groupNameLabel" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
+		        <EditText android:layout_height="wrap_content" android:id="@+id/groupName" android:hint="Enter Name Here  " android:layout_width="wrap_content" ></EditText>
 		    </TableRow>
-		    <TableRow android:paddingTop="50dp">
+		    
+		    <TableRow android:paddingTop="30dp">
 		   		<TextView android:text="Your Info:" android:id="@+id/yourInfoLabel" android:textSize="9pt" android:layout_height="wrap_content" android:layout_width="fill_parent"></TextView>
 		   		<LinearLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:orientation="vertical">
-		   			<Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/chooseContact" android:text="Choose Contact" android:textSize="7pt" android:onClick="onChooseContactClick"></Button>
+		   			<Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/chooseContact" android:text="Choose Your Contact" android:textSize="7pt" android:onClick="onChooseContactClick"></Button>
 			 		<TextView android:hint="Name:" android:id="@+id/nameCB" android:textSize="9pt" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_gravity="center_horizontal"></TextView>
 			 		<CheckBox android:layout_width="wrap_content" android:hint="Phone Number" android:layout_height="wrap_content" android:id="@+id/phoneNumberCB" android:checked="true"></CheckBox>
 					<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="Email" android:id="@+id/emailCB" android:checked="true"></CheckBox>
 				</LinearLayout>
 			</TableRow>
-		    <TableRow android:paddingTop="50dp">
+		    <TableRow android:paddingTop="30dp">
 		    	<TextView android:layout_height="wrap_content" android:layout_width="fill_parent"></TextView>
 		        <Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/join_begin" android:text="Join!" android:textSize="12pt"></Button>
 		 	 </TableRow>
