@@ -44,7 +44,7 @@ class Group(JSONSerializable):
 		@rtype DateTime instance
 		@return The DateTime form of the string date provided """
 		
-		return datetime.datetime.strptime( "2007-03-04T21:08:12", "%Y-%m-%dT%H:%M:%S" )
+		return datetime.datetime.strptime( str_date, "%Y-%m-%dT%H:%M:%S" )
 	
 	@classmethod
 	def get_by_name(self, name):
@@ -108,7 +108,7 @@ class Group(JSONSerializable):
 		""" Returns true if this group information is no longer needed
 		
 		Returns true if the number of downloads equals the number of people in the group and the maximum group member count or if the current time execeeds that of the expiration time"""
-		return (self.max_members == self.current_users and self.max_members == self.current_users) or self.expiration < datetime.datetime.now()
+		return (self.max_members == self.current_users and self.max_members == self.times_downloaded) or self.expiration < datetime.datetime.now()
 
 class Contact(JSONSerializable):
 	""" Model to contain information about a BlazingContacts client """

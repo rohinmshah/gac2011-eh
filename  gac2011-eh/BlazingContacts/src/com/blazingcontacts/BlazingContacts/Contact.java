@@ -12,6 +12,7 @@ public class Contact {
 	private static final String JSON_NAME_ATTRIBUTE = "name";
 	private static final String JSON_PHONE_ATTRIBUTE = "phone";
 	private static final String JSON_EMAIL_ATTRIBUTE = "email";
+	private static final String JSON_DATA_ATTRIBUTE = "data";
 	private String name, phoneNumber, email;
 
 	/**
@@ -65,7 +66,7 @@ public class Contact {
 	}
 
 	/**
-	 * Creates a new contact by through the provided JSON object
+	 * Creates a new contact by through the provided JSON encoded string
 	 * @param json JSON encoded string
 	 * @return Contact instance from json
 	 * @throws JSONException 
@@ -74,10 +75,22 @@ public class Contact {
 		
 		// Parse JSON
 		JSONObject jsonObject = new JSONObject(json);
-		String name = jsonObject.getString(JSON_NAME_ATTRIBUTE);
-		String phoneNumber = jsonObject.getString(JSON_PHONE_ATTRIBUTE);
-		String email = jsonObject.getString(JSON_EMAIL_ATTRIBUTE);
-		
+		return fromJSONObject(jsonObject);
+	}
+	
+	/**
+	 * Creates a new contact by through the provided JSON object
+	 * @param jsonObject JSON decoded object
+	 * @return Contact instance from json
+	 * @throws JSONException 
+	 * @throws JSONException 
+	 */
+	public static Contact fromJSONObject(JSONObject jsonObject) throws JSONException
+	{
+		JSONObject contact = jsonObject.getJSONObject(JSON_DATA_ATTRIBUTE);
+		String name = contact.getString(JSON_NAME_ATTRIBUTE);
+		String phoneNumber = contact.getString(JSON_PHONE_ATTRIBUTE);
+		String email = contact.getString(JSON_EMAIL_ATTRIBUTE);
 		
 		return new Contact(name, phoneNumber, email);
 	}

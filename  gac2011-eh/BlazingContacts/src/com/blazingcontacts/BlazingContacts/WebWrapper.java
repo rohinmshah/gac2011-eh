@@ -197,7 +197,7 @@ public class WebWrapper {
 		jsonContactList = result.getJSONArray(JSON_CONTACTS_ATTRIBUTE);
 		javaContactList = new ArrayList<Contact>(jsonContactList.length());
 		for(int i = 0; i<jsonContactList.length(); i++)
-			javaContactList.set(i, Contact.fromJSON((String) jsonContactList.get(i)) ); // TODO: a bit kludgy
+			javaContactList.set(i, Contact.fromJSON(((JSONObject)jsonContactList.get(i)).toString())); // TODO: a bit kludgy
 		
 		// TODO: The cast to array is a bit kludgy
 		return (Contact []) (javaContactList.toArray());
@@ -386,6 +386,7 @@ public class WebWrapper {
 	private String dateToISOString(Date target)
 	{
 		SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
+		formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 		return formatter.format(target);
 	}
 	
