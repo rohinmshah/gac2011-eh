@@ -10,6 +10,7 @@ import android.content.OperationApplicationException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.util.Log;
 import android.widget.Toast;
 
 public class ContactDownloadAsyncTask extends
@@ -112,6 +113,9 @@ public class ContactDownloadAsyncTask extends
 			mStatus = mWrapper.getStatus();
 			if (mStatus.isFinished()) {
 				Contact[] contactsToAdd = mWrapper.downloadContactInfo();
+				if (mStatus.getMemberCount() != contactsToAdd.length) {
+					Log.e("ERROR", "Inconsistent Data");
+				}
 				ContactsProviderWrapper cpw = new ContactsProviderWrapper(
 						mService.getApplicationContext(), 0);
 				for (Contact contactToAdd : contactsToAdd) {
@@ -171,7 +175,7 @@ public class ContactDownloadAsyncTask extends
 				mService.getApplicationContext(), 0, notificationIntent, 0);
 		if (values[0].isFinished()) {
 			contentTitle = "Finished!";
-			contentText = values[0].getMemberCount()
+			contentText = (values[0].getMemberCount() - 1)
 					+ " contacts were added to your Contacts";
 			Toast.makeText(mService.getApplicationContext(),
 					"Finished! " + contentText, Toast.LENGTH_LONG).show();
