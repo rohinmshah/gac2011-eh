@@ -3,8 +3,8 @@ package com.blazingcontacts.BlazingContacts;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,10 +24,10 @@ public class StartActivity extends GroupActivity {
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		// Remove title bar
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
+
 		setContentView(R.layout.secondview);
 		Spinner s = (Spinner) findViewById(R.id.timeSpinner);
 		start_begin = (Button) findViewById(R.id.start_begin);
@@ -35,6 +35,7 @@ public class StartActivity extends GroupActivity {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, array_spinner);
 		s.setAdapter(adapter);
+		s.setSelection(1);
 
 		start_begin.setOnClickListener(new OnClickListener() {
 			/*
@@ -83,7 +84,8 @@ public class StartActivity extends GroupActivity {
 					}
 					i.putExtra(MAX_PEOPLE, numberOfPeople);
 				} catch (NumberFormatException e) {
-					Toast.makeText(StartActivity.this,
+					Toast.makeText(
+							StartActivity.this,
 							"Time and Number of People fields must be numbers!",
 							Toast.LENGTH_LONG).show();
 					return;
