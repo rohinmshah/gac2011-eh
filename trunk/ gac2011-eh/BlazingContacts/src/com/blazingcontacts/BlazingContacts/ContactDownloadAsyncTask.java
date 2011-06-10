@@ -16,7 +16,7 @@ public class ContactDownloadAsyncTask extends
 		AsyncTask<Intent, GroupStatus, Void> {
 
 	private ContactDownloadService mService;
-	private WebTestWrapper mWrapper;
+	private WebWrapper mWrapper;
 	private GroupStatus mStatus;
 	private Notification mNotification;
 	private NotificationManager mManager;
@@ -57,7 +57,7 @@ public class ContactDownloadAsyncTask extends
 				Date time = WebWrapper.getDateFromNow(extras
 						.getLong(StartActivity.LIFETIME_MILLIS));
 				int maxPeople = extras.getInt(StartActivity.MAX_PEOPLE);
-				mWrapper = new WebTestWrapper(groupName, password, user, time,
+				mWrapper = new WebWrapper(groupName, password, user, time,
 						maxPeople);
 			} catch (Exception e) {
 				contentTitle = "Connection failed";
@@ -74,7 +74,7 @@ public class ContactDownloadAsyncTask extends
 
 		case GroupActivity.TYPE_JOIN:
 			try {
-				mWrapper = new WebTestWrapper(groupName, password, user);
+				mWrapper = new WebWrapper(groupName, password, user);
 			} catch (Exception e) {
 				contentTitle = "Connection failed";
 				contentText = "Could not connect to the server.  Aborting.";
@@ -134,6 +134,17 @@ public class ContactDownloadAsyncTask extends
 			contentText = "The contacts could not be updated.  Aborting.";
 			mNotification.setLatestEventInfo(mService.getApplicationContext(),
 					contentTitle, contentText, contentIntent);
+			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
+					mNotification);
+			errorToast.show();
+		} catch (Exception e) {
+			contentTitle = "Web service problem";
+			contentText = e.getMessage();
+			if (contentText == null || contentText.equals("")) {
+				contentText = "Unknown error";
+			}
+			mNotification.setLatestEventInfo(mService.getApplicationContext(),
+					contentTitle, contentText, null);
 			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 					mNotification);
 			errorToast.show();
