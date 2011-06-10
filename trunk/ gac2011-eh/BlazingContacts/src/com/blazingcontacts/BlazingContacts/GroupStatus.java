@@ -3,8 +3,8 @@ package com.blazingcontacts.BlazingContacts;
 import java.util.Date;
 
 /**
- * Represents the status of the group - the remaining time in terms of
- * time and/or number of people in the group.
+ * Represents the status of the group - the remaining time in terms of time
+ * and/or number of people in the group.
  * 
  * @author Rohin
  */
@@ -61,6 +61,6 @@ public class GroupStatus {
 	 * @return - true if the group has expired
 	 */
 	public boolean isFinished() {
-		return (groupMax <= memberCount) || remainingTime.getTime() == 0;
+		return (groupMax <= memberCount) || remainingTime.getTime() <= 0;
 	}
 }
