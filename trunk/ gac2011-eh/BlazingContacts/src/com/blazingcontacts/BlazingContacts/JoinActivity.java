@@ -52,14 +52,12 @@ public class JoinActivity extends GroupActivity {
 				i.putExtra(GROUP_NAME, join_group_name.getText().toString());
 				String name = join_name.getText().toString();
 				String phone = "";
-				CheckBox phoneCB = (CheckBox) findViewById(R.id.phoneNumberCB);
-				if (phoneCB.isChecked()) {
-					phone = phoneCB.getText().toString();
+				if (join_phone.isChecked()) {
+					phone = join_phone.getText().toString();
 				}
 				String email = "";
-				CheckBox emailCB = (CheckBox) findViewById(R.id.emailCB);
-				if (emailCB.isChecked()) {
-					email = emailCB.getText().toString();
+				if (join_email.isChecked()) {
+					email = join_email.getText().toString();
 				}
 				i.putExtra(MY_NAME, name);
 				i.putExtra(MY_PHONE_NUMBER, phone);
@@ -95,22 +93,19 @@ public class JoinActivity extends GroupActivity {
 				getString(R.string.join_preference), MODE_PRIVATE);
 		Editor e = data.edit();
 		e.clear();
-		CheckBox phoneCheck = (CheckBox) findViewById(R.id.phoneNumberCB);
-		CheckBox emailCheck = (CheckBox) findViewById(R.id.emailCB);
-		e.putString(getString(R.string.join_contact_name),
-				((TextView) findViewById(R.id.nameCB)).getText().toString());
+		e.putString(getString(R.string.join_contact_name), join_name.getText()
+				.toString());
 		e.putBoolean(getString(R.string.join_phone_checked),
-				phoneCheck.isChecked());
-		e.putString(getString(R.string.join_contact_phone), phoneCheck
+				join_phone.isChecked());
+		e.putString(getString(R.string.join_contact_phone), join_phone
 				.getText().toString());
 		e.putBoolean(getString(R.string.join_email_checked),
-				emailCheck.isChecked());
-		e.putString(getString(R.string.join_contact_email), emailCheck
+				join_email.isChecked());
+		e.putString(getString(R.string.join_contact_email), join_email
 				.getText().toString());
 		if (!joinClicked) {
-			e.putString(getString(R.string.join_group_name),
-					((TextView) findViewById(R.id.groupName)).getText()
-							.toString());
+			e.putString(getString(R.string.join_group_name), join_group_name
+					.getText().toString());
 		}
 		e.commit();
 	}
@@ -118,12 +113,10 @@ public class JoinActivity extends GroupActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		TextView name = (TextView) findViewById(R.id.nameCB);
-		Button joinButton = (Button) findViewById(R.id.join_begin);
-		if (name.getText().toString().equals("")) {
-			joinButton.setVisibility(Button.INVISIBLE);
+		if (join_name.getText().toString().equals("")) {
+			join_begin.setVisibility(Button.INVISIBLE);
 		} else {
-			joinButton.setVisibility(Button.VISIBLE);
+			join_begin.setVisibility(Button.VISIBLE);
 		}
 	}
 
@@ -137,9 +130,9 @@ public class JoinActivity extends GroupActivity {
 	 */
 	@Override
 	protected void populateContact(String name, String phoneNumber, String email) {
-		((TextView) findViewById(R.id.nameCB)).setText(name);
-		((CheckBox) findViewById(R.id.phoneNumberCB)).setText(phoneNumber);
-		((CheckBox) findViewById(R.id.emailCB)).setText(email);
-		((Button) findViewById(R.id.join_begin)).setVisibility(Button.VISIBLE);
+		join_name.setText(name);
+		join_phone.setText(phoneNumber);
+		join_email.setText(email);
+		join_begin.setVisibility(Button.VISIBLE);
 	}
 }
