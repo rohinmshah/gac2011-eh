@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -13,10 +14,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -26,6 +29,11 @@ import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.StringBody;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -233,16 +241,17 @@ public class WebWrapper {
 		HttpResponse response;
 		String jsonContent;
 		JSONObject result;
+		NameValuePair pair;
+		MultipartEntity data = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 		HttpClient httpclient = new DefaultHttpClient();
 		
 		// Add group name and password
+		// TODO: These should be added directly to httpParams
 		parameters.add(new BasicNameValuePair(GROUP_NAME_PARAMETER, groupName));
 		parameters.add(new BasicNameValuePair(PASSWORD_PARAMETER, password));
 		
 		// Create resource path and request
-		URI uri = URIUtils.createURI(DEFAULT_SCHEME, DEFAULT_HOST, -1, resource, 
-			    URLEncodedUtils.format(parameters, "UTF-8"), null);
-		request = createRequest(method, uri);
+		request = createRequest(method, resource, parameters);
 		
 		// Execute request
 		response = httpclient.execute(request);
@@ -261,26 +270,88 @@ public class WebWrapper {
 	/**
 	 * Simple factory to create an appropriate request object
 	 * @param method The method that will be executed
-	 * @param uri The URI on which this method will be executed
+	 * @param resource The resource this request is targeting
+	 * @param parameters the parameters to encode and pass to server
 	 * @return The appropriate request that corresponds to the provided method
+	 * @throws UnsupportedEncodingException 
+	 * @throws URISyntaxException 
 	 */
-	private HttpRequestBase createRequest(HttpMethod method, URI uri)
-	{
+	private HttpRequestBase createRequest(HttpMethod method, String resource, List<NameValuePair> parameters) throws UnsupportedEncodingException, URISyntaxException
+	{	
+		URI uri;
+		
+		// Generate URI
+		// TODO: A bit of a kludge
+		if(method == HttpMethod.GET || method == HttpMethod.DELETE)
+		{			
+			// Create URI and insert parameters if needed
+			uri = URIUtils.createURI(DEFAULT_SCHEME, DEFAULT_HOST, -1, resource, 
+					URLEncodedUtils.format(parameters, "UTF-8"), null);
+		}
+		else
+		{
+			// Create URI and insert parameters if needed
+			uri = URIUtils.createURI(DEFAULT_SCHEME, DEFAULT_HOST, -1, resource, 
+				    null, null);
+		}
+		
+		// Make actual request
 		switch (method)
 		{
+		
+		// Create URL encoded values for GET and DELETE requests
 		case GET:
-			return new HttpGet(uri);
-		case PUT:
-			return new HttpPut(uri);
-		case POST:
-			return new HttpPost(uri);
+			HttpGet returnGet = new HttpGet(uri);
+			return returnGet;
+		
 		case DELETE:
-			return new HttpDelete(uri);
+			HttpDelete returnDelete = new HttpDelete(uri);
+			return returnDelete;
+			
+		// Create multipart data for POST and PUT
+		case PUT:
+			HttpPut returnPut = new HttpPut(uri);
+			returnPut.setEntity(createMultipart(parameters));
+			return returnPut;
+			
+		case POST:
+			HttpPost returnPost = new HttpPost(uri);
+			returnPost.setEntity(createMultipart(parameters));
+			return returnPost;
+			
 		default:
 			return null; // Unreachable code
 		}
 	}
 	
+	/**
+	 * Create an HttpParams instance for URL encoded parameters
+	 * @param parameters the parameters to encode
+	 * @return An Apache HttpParams encoding of the provided parameters
+	 */
+	private HttpParams createParams(List<NameValuePair> parameters) {
+		NameValuePair pair;
+		HttpParams httpParams = new BasicHttpParams();
+		
+		// Create http parameters
+		for(int i=0; i<parameters.size(); i++)
+		{
+			pair = parameters.get(i);
+			httpParams.setParameter(pair.getName(), pair.getValue());
+		}
+		return httpParams;
+	}
+
+	/**
+	 * Create form style multipart data 
+	 * @param parameters The parameters to encode
+	 * @return An HttpEntity encoding of the provided parameters
+	 * @throws UnsupportedEncodingException 
+	 */
+	private HttpEntity createMultipart(List<NameValuePair> parameters) throws UnsupportedEncodingException {
+		return new UrlEncodedFormEntity(parameters);
+	}
+
 	/**
 	 * Returns the raw string body of an HttpResponse
 	 * @param response the response to read

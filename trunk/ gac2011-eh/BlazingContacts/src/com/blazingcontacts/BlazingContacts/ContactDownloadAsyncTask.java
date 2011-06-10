@@ -20,6 +20,7 @@ public class ContactDownloadAsyncTask extends
 	private GroupStatus mStatus;
 	private Notification mNotification;
 	private NotificationManager mManager;
+	private PendingIntent contentIntent;
 	private int mType;
 	private Toast errorToast;
 
@@ -36,10 +37,6 @@ public class ContactDownloadAsyncTask extends
 	@Override
 	protected Void doInBackground(Intent... params) {
 		CharSequence contentTitle, contentText;
-		Intent notificationIntent = new Intent(mService,
-				ContactDownloadService.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(
-				mService.getApplicationContext(), 0, notificationIntent, 0);
 
 		Intent intent = params[0];
 		Bundle extras = intent.getExtras();
@@ -94,10 +91,6 @@ public class ContactDownloadAsyncTask extends
 
 	private void askForStatusLoop() {
 		CharSequence contentTitle = "", contentText = "";
-		Intent notificationIntent = new Intent(mService,
-				ContactDownloadService.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(
-				mService.getApplicationContext(), 0, notificationIntent, 0);
 		try {
 			Thread.sleep(1000);
 			mStatus = mWrapper.getStatus();
@@ -153,35 +146,26 @@ public class ContactDownloadAsyncTask extends
 
 	@Override
 	protected void onProgressUpdate(GroupStatus... values) {
-		CharSequence contentTitle = "Progress Update", contentText = "";
-		Intent notificationIntent = new Intent(mService,
-				ContactDownloadService.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(
-				mService.getApplicationContext(), 0, notificationIntent, 0);
-
+		CharSequence contentTitle = "Progress Update";
+		CharSequence contentText = "";
 		if (values[0].isFinished()) {
 			contentTitle = "Finished!";
 			contentText = values[0].getMemberCount()
 					+ " contacts were added to your Contacts";
-			mNotification.setLatestEventInfo(mService.getApplicationContext(),
-					contentTitle, contentText, contentIntent);
-			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
-					mNotification);
 			Toast.makeText(mService.getApplicationContext(),
 					"Finished! " + contentText, Toast.LENGTH_LONG).show();
 		} else {
 
 			long milliseconds = values[0].getRemainingTime().getTime() / 1000;
-			contentText = "Time: " + milliseconds;
+			contentText = "Time left: " + milliseconds;
 			if (values[0].getGroupMax() != WebWrapper.NO_GROUP_MAX) {
 				contentText = contentText
-						+ "People: "
+						+ "\nNumber of people left: "
 						+ (values[0].getGroupMax() - values[0].getMemberCount());
 			}
-			mNotification.setLatestEventInfo(mService.getApplicationContext(),
-					contentTitle, contentText, contentIntent);
-			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
-					mNotification);
 		}
+		mNotification.setLatestEventInfo(mService.getApplicationContext(),
+				contentTitle, contentText, contentIntent);
+		mManager.notify(ContactDownloadService.NOTIFICATION_ID, mNotification);
 	}
 }
