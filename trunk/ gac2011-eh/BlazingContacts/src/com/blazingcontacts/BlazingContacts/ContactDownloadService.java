@@ -15,7 +15,7 @@ import android.widget.Toast;
  */
 public class ContactDownloadService extends Service {
 
-	public static final int NOTIFICATION_ID = 10;
+	public static final int NOTIFICATION_ID = 943;
 
 	private Notification mNotification;
 	private NotificationManager mManager;
