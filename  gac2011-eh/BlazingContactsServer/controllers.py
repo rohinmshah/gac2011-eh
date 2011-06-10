@@ -25,7 +25,7 @@ class JSONController(webapp.RequestHandler):
 	BAD_PASSWORD_ERROR_INT = 5
 	BAD_PASSWORD_ERROR_STRING = "Invalid group password"
 	
-	def render_json(self, response, error = NO_ERROR_INT, message = NO_ERROR_STRING, require_serialization = False):
+	def render_json(self, response, error = NO_ERROR_INT, message = NO_ERROR_STRING, require_serialization = True):
 		""" Renders a JSONSerializable object with appropriate headers
 		
 		@type response: JSONSerializable
@@ -186,7 +186,7 @@ class ContactController(JSONController):
 		# Get the name and group
 		try:
 			contact_id = int(self.request.get("contact_id"))
-			group_name = cgi.escape(self.request.get("group_name"))
+			group_name = cgi.escape(self.request.get("name"))
 			password = self.request.get("password")
 		except:
 			self.render_json(None, JSONController.BAD_FORM_ERROR_INT, JSONController.BAD_FORM_ERROR_STRING)
@@ -221,7 +221,7 @@ class ContactController(JSONController):
 		try:
 			params = cgi.parse_qs(self.request.body)
 			data = cgi.escape(params["data"][0])
-			group_name = cgi.escape(params["group_name"][0])
+			group_name = cgi.escape(params["name"][0])
 			password = params["password"][0]
 		except:
 			self.render_json(None, JSONController.BAD_FORM_ERROR_INT, JSONController.BAD_FORM_ERROR_STRING)
@@ -252,7 +252,7 @@ class ContactController(JSONController):
 	def post(self):
 		try:
 			contact_id = int(self.request.get("contact_id"))
-			group_name = cgi.escape(self.request.get("group_name"))
+			group_name = cgi.escape(self.request.get("name"))
 			data = cgi.escape(self.request.get("data"))
 			password = self.request.get("password")
 		except:

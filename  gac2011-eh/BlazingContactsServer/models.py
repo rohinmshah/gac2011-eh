@@ -67,7 +67,7 @@ class Group(JSONSerializable):
 			contact.delete()
 		
 		# Delete group
-		Group.delete(self)
+		JSONSerializable.delete(self)
 	
 	def as_dict(self):
 		""" Returns a dictionary representation of this group
