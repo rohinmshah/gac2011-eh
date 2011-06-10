@@ -71,7 +71,10 @@ class GroupDownloadController(JSONController):
 		group.put()
 		
 		# Get all group members and render
-		response = map(models.Contact.as_dict, group.get_contacts())
+		response = []
+		for contact in group.get_contacts():
+			response.append(contact.as_dict())
+		
 		self.render_json({"contacts" : response}, require_serialization = False)
 		
 		# Check to see if the group has expired

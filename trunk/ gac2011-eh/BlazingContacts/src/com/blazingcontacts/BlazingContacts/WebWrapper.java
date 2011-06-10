@@ -197,10 +197,10 @@ public class WebWrapper {
 		jsonContactList = result.getJSONArray(JSON_CONTACTS_ATTRIBUTE);
 		javaContactList = new ArrayList<Contact>(jsonContactList.length());
 		for(int i = 0; i<jsonContactList.length(); i++)
-			javaContactList.set(i, Contact.fromJSON(((JSONObject)jsonContactList.get(i)).toString())); // TODO: a bit kludgy
+			javaContactList.add(Contact.fromJSON(((JSONObject)jsonContactList.get(i)).toString())); // TODO: a bit kludgy
 		
 		// TODO: The cast to array is a bit kludgy
-		return (Contact []) (javaContactList.toArray());
+		return (Contact []) (javaContactList.toArray(new Contact[] { }));
 	}
 	
 	/**
