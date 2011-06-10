@@ -22,6 +22,9 @@ public class ContactDownloadAsyncTask extends
 	private NotificationManager mManager;
 	private int mType;
 	private Toast errorToast;
+	private String userName;
+	private String userPhone;
+	private String userEmail;
 
 	public ContactDownloadAsyncTask(ContactDownloadService service,
 			Notification notification, NotificationManager manager) {
@@ -47,9 +50,10 @@ public class ContactDownloadAsyncTask extends
 		mType = extras.getInt(GroupActivity.GROUP_TYPE);
 		String groupName = extras.getString(GroupActivity.GROUP_NAME);
 		String password = "blank";
-		Contact user = new Contact(extras.getString(GroupActivity.MY_NAME),
-				extras.getString(GroupActivity.MY_PHONE_NUMBER),
-				extras.getString(GroupActivity.MY_EMAIL));
+		userName = extras.getString(GroupActivity.MY_NAME);
+		userPhone = extras.getString(GroupActivity.MY_PHONE_NUMBER);
+		userEmail = extras.getString(GroupActivity.MY_EMAIL);
+		Contact user = new Contact(userName, userPhone, userEmail);
 
 		switch (mType) {
 		case GroupActivity.TYPE_START:
@@ -111,7 +115,9 @@ public class ContactDownloadAsyncTask extends
 				ContactsProviderWrapper cpw = new ContactsProviderWrapper(
 						mService.getApplicationContext(), 0);
 				for (Contact contactToAdd : contactsToAdd) {
-					cpw.addContact(contactToAdd);
+					if (!isUser(contactToAdd)) {
+						cpw.addContact(contactToAdd);
+					}
 				}
 				publishProgress(mStatus);
 			} else {
@@ -182,5 +188,18 @@ public class ContactDownloadAsyncTask extends
 		mNotification.setLatestEventInfo(mService.getApplicationContext(),
 				contentTitle, contentText, contentIntent);
 		mManager.notify(ContactDownloadService.NOTIFICATION_ID, mNotification);
+	}
+
+	private boolean isUser(Contact toCheck) {
+		if (toCheck.getPhoneNumber().equals("")) {
+			if (toCheck.getEmail().equals("")) {
+				return toCheck.getName().equals(userName);
+			} else if (toCheck.getEmail().equals(userEmail)) {
+				return true;
+			}
+		} else if (toCheck.getPhoneNumber().equals(userPhone)) {
+			return true;
+		}
+		return false;
 	}
 }
