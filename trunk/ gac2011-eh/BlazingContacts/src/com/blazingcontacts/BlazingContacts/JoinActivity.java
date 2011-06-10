@@ -46,22 +46,6 @@ public class JoinActivity extends GroupActivity {
 			 */
 			public void onClick(View v) {
 				joinClicked = true;
-
-				SharedPreferences startData = getSharedPreferences(
-						getString(R.string.start_preference), MODE_PRIVATE);
-				Editor e = startData.edit();
-				e.putString(getString(R.string.start_contact_name), join_name
-						.getText().toString());
-				e.putBoolean(getString(R.string.start_phone_checked),
-						join_phone.isChecked());
-				e.putString(getString(R.string.start_contact_phone), join_phone
-						.getText().toString());
-				e.putBoolean(getString(R.string.start_email_checked),
-						join_email.isChecked());
-				e.putString(getString(R.string.start_contact_email), join_email
-						.getText().toString());
-				e.commit();
-
 				Intent i = new Intent(JoinActivity.this,
 						ContactDownloadService.class);
 				i.putExtra(GROUP_TYPE, TYPE_JOIN);
@@ -87,7 +71,16 @@ public class JoinActivity extends GroupActivity {
 				getString(R.string.join_preference), MODE_PRIVATE);
 		join_group_name.setText(data.getString(
 				getString(R.string.join_group_name), ""));
-		// Contact fields will be populated in onResume() by updateContact().
+		join_name.setText(data.getString(getString(R.string.join_contact_name),
+				""));
+		join_phone.setChecked(data.getBoolean(
+				getString(R.string.join_phone_checked), true));
+		join_phone.setText(data.getString(
+				getString(R.string.join_contact_phone), ""));
+		join_email.setChecked(data.getBoolean(
+				getString(R.string.join_email_checked), true));
+		join_email.setText(data.getString(
+				getString(R.string.join_contact_email), ""));
 
 		joinClicked = false;
 
@@ -120,7 +113,6 @@ public class JoinActivity extends GroupActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateContact();
 		if (join_name.getText().toString().equals("")) {
 			join_begin.setVisibility(Button.INVISIBLE);
 		} else {
@@ -142,20 +134,5 @@ public class JoinActivity extends GroupActivity {
 		join_phone.setText(phoneNumber);
 		join_email.setText(email);
 		join_begin.setVisibility(Button.VISIBLE);
-	}
-
-	private void updateContact() {
-		SharedPreferences data = getSharedPreferences(
-				getString(R.string.join_preference), MODE_PRIVATE);
-		join_name.setText(data.getString(getString(R.string.join_contact_name),
-				""));
-		join_phone.setChecked(data.getBoolean(
-				getString(R.string.join_phone_checked), true));
-		join_phone.setText(data.getString(
-				getString(R.string.join_contact_phone), ""));
-		join_email.setChecked(data.getBoolean(
-				getString(R.string.join_email_checked), true));
-		join_email.setText(data.getString(
-				getString(R.string.join_contact_email), ""));
 	}
 }

@@ -142,8 +142,17 @@ public class StartActivity extends GroupActivity {
 				getString(R.string.start_time_units), 1));
 		start_max_people.setText(data.getString(
 				getString(R.string.start_max_people), ""));
-		// updateContact() will populate the contact fields in onResume
 
+		start_name.setText(data.getString(
+				getString(R.string.start_contact_name), ""));
+		start_phone.setChecked(data.getBoolean(
+				getString(R.string.start_phone_checked), true));
+		start_phone.setText(data.getString(
+				getString(R.string.start_contact_phone), ""));
+		start_email.setChecked(data.getBoolean(
+				getString(R.string.start_email_checked), true));
+		start_email.setText(data.getString(
+				getString(R.string.start_contact_email), ""));
 		startClicked = false;
 	}
 
@@ -180,7 +189,6 @@ public class StartActivity extends GroupActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateContact();
 		if (start_name.getText().toString().equals("")) {
 			start_begin.setVisibility(Button.INVISIBLE);
 		} else {
@@ -202,20 +210,5 @@ public class StartActivity extends GroupActivity {
 		start_phone.setText(phoneNumber);
 		start_email.setText(email);
 		start_begin.setVisibility(Button.VISIBLE);
-	}
-
-	private void updateContact() {
-		SharedPreferences data = getSharedPreferences(
-				getString(R.string.start_preference), MODE_PRIVATE);
-		start_name.setText(data.getString(
-				getString(R.string.start_contact_name), ""));
-		start_phone.setChecked(data.getBoolean(
-				getString(R.string.start_phone_checked), true));
-		start_phone.setText(data.getString(
-				getString(R.string.start_contact_phone), ""));
-		start_email.setChecked(data.getBoolean(
-				getString(R.string.start_email_checked), true));
-		start_email.setText(data.getString(
-				getString(R.string.start_contact_email), ""));
 	}
 }
