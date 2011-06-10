@@ -103,66 +103,69 @@ public class ContactDownloadAsyncTask extends
 	 * updated.
 	 */
 	private void askForStatusLoop() {
-		Intent notificationIntent = new Intent(mService,
-				ContactDownloadService.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(
-				mService.getApplicationContext(), 0, notificationIntent, 0);
-		CharSequence contentTitle = "", contentText = "";
-		try {
-			Thread.sleep(1000);
-			mStatus = mWrapper.getStatus();
-			if (mStatus.isFinished()) {
-				Contact[] contactsToAdd = mWrapper.downloadContactInfo();
-				if (mStatus.getMemberCount() != contactsToAdd.length) {
-					Log.e("ERROR", "Inconsistent Data");
-				}
-				ContactsProviderWrapper cpw = new ContactsProviderWrapper(
-						mService.getApplicationContext(), 0);
-				for (Contact contactToAdd : contactsToAdd) {
-					if (!isUser(contactToAdd)) {
-						cpw.addContact(contactToAdd);
+		while(true)
+		{
+			Intent notificationIntent = new Intent(mService,
+					ContactDownloadService.class);
+			PendingIntent contentIntent = PendingIntent.getActivity(
+					mService.getApplicationContext(), 0, notificationIntent, 0);
+			CharSequence contentTitle = "", contentText = "";
+			try {
+				Thread.sleep(1000);
+				mStatus = mWrapper.getStatus();
+				if (mStatus.isFinished()) {
+					Contact[] contactsToAdd = mWrapper.downloadContactInfo();
+					if (mStatus.getMemberCount() != contactsToAdd.length) {
+						Log.e("ERROR", "Inconsistent Data");
 					}
+					ContactsProviderWrapper cpw = new ContactsProviderWrapper(
+							mService.getApplicationContext(), 0);
+					for (Contact contactToAdd : contactsToAdd) {
+						if (!isUser(contactToAdd)) {
+							cpw.addContact(contactToAdd);
+						}
+					}
+					publishProgress(mStatus);
+					break;
+				} else {
+					publishProgress(mStatus);
 				}
-				publishProgress(mStatus);
-			} else {
-				publishProgress(mStatus);
-				askForStatusLoop();
+			} catch (InterruptedException i) {
+				contentTitle = "Interruption";
+				contentText = "The service was interrupted while waiting for the group to fill.  Aborting.";
+				mNotification.setLatestEventInfo(mService.getApplicationContext(),
+						contentTitle, contentText, contentIntent);
+				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
+						mNotification);
+				errorToast.show();
+			} catch (OperationApplicationException oae) {
+				contentTitle = "Operation Error";
+				contentText = "The contacts could not be updated.  Aborting.";
+				mNotification.setLatestEventInfo(mService.getApplicationContext(),
+						contentTitle, contentText, contentIntent);
+				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
+						mNotification);
+				errorToast.show();
+			} catch (RemoteException re) {
+				contentTitle = "Remote Error";
+				contentText = "The contacts could not be updated.  Aborting.";
+				mNotification.setLatestEventInfo(mService.getApplicationContext(),
+						contentTitle, contentText, contentIntent);
+				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
+						mNotification);
+				errorToast.show();
+			} catch (Exception e) {
+				contentTitle = "Web service problem";
+				contentText = e.getMessage();
+				if (contentText == null || contentText.equals("")) {
+					contentText = "Unknown error";
+				}
+				mNotification.setLatestEventInfo(mService.getApplicationContext(),
+						contentTitle, contentText, null);
+				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
+						mNotification);
+				errorToast.show();
 			}
-		} catch (InterruptedException i) {
-			contentTitle = "Interruption";
-			contentText = "The service was interrupted while waiting for the group to fill.  Aborting.";
-			mNotification.setLatestEventInfo(mService.getApplicationContext(),
-					contentTitle, contentText, contentIntent);
-			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
-					mNotification);
-			errorToast.show();
-		} catch (OperationApplicationException oae) {
-			contentTitle = "Operation Error";
-			contentText = "The contacts could not be updated.  Aborting.";
-			mNotification.setLatestEventInfo(mService.getApplicationContext(),
-					contentTitle, contentText, contentIntent);
-			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
-					mNotification);
-			errorToast.show();
-		} catch (RemoteException re) {
-			contentTitle = "Remote Error";
-			contentText = "The contacts could not be updated.  Aborting.";
-			mNotification.setLatestEventInfo(mService.getApplicationContext(),
-					contentTitle, contentText, contentIntent);
-			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
-					mNotification);
-			errorToast.show();
-		} catch (Exception e) {
-			contentTitle = "Web service problem";
-			contentText = e.getMessage();
-			if (contentText == null || contentText.equals("")) {
-				contentText = "Unknown error";
-			}
-			mNotification.setLatestEventInfo(mService.getApplicationContext(),
-					contentTitle, contentText, null);
-			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
-					mNotification);
-			errorToast.show();
 		}
 	}
 
