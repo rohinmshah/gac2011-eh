@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.widget.Toast;
 
 /**
  * Simple service to poll the group status and download contact information at
@@ -30,7 +31,7 @@ public class ContactDownloadService extends Service {
 		// Create new notification
 		mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		int icon = android.R.drawable.stat_notify_sync;
-		CharSequence text = "Starting BlazingContact Download Counter";
+		CharSequence text = null;
 		long when = System.currentTimeMillis();
 		mNotification = new Notification(icon, text, when);
 
@@ -44,6 +45,9 @@ public class ContactDownloadService extends Service {
 				contentText, contentIntent);
 
 		mManager.notify(NOTIFICATION_ID, mNotification);
+		Toast.makeText(getApplicationContext(),
+				"Waiting on group.  See notification for remaining time.",
+				Toast.LENGTH_LONG).show();
 		ContactDownloadAsyncTask cdat = new ContactDownloadAsyncTask(this,
 				mNotification, mManager);
 		cdat.execute(intent);

@@ -6,8 +6,11 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.widget.Toast;
 
 public class ContactDownloadAsyncTask extends
 		AsyncTask<Intent, GroupStatus, Void> {
@@ -18,12 +21,16 @@ public class ContactDownloadAsyncTask extends
 	private Notification mNotification;
 	private NotificationManager mManager;
 	private int mType;
+	private Toast errorToast;
 
 	public ContactDownloadAsyncTask(ContactDownloadService service,
 			Notification notification, NotificationManager manager) {
 		mService = service;
 		mNotification = notification;
 		mManager = manager;
+		errorToast = Toast.makeText(mService.getApplicationContext(),
+				"An error occurred.  See the notification for details.",
+				Toast.LENGTH_LONG);
 	}
 
 	@Override
@@ -60,6 +67,7 @@ public class ContactDownloadAsyncTask extends
 						contentText, contentIntent);
 				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 						mNotification);
+				errorToast.show();
 				return null;
 			}
 			break;
@@ -75,6 +83,7 @@ public class ContactDownloadAsyncTask extends
 						contentText, contentIntent);
 				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 						mNotification);
+				errorToast.show();
 				return null;
 			}
 			break;
@@ -111,18 +120,24 @@ public class ContactDownloadAsyncTask extends
 					contentTitle, contentText, contentIntent);
 			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 					mNotification);
-		} catch (Exception e) {
-			contentTitle = "Web service problem";
-			contentText = e.getMessage();
-			if (contentText == null || contentText.equals("")) {
-				contentText = "Unknown error";
-			}
+			errorToast.show();
+		} catch (OperationApplicationException oae) {
+			contentTitle = "Operation Error";
+			contentText = "The contacts could not be updated.  Aborting.";
 			mNotification.setLatestEventInfo(mService.getApplicationContext(),
 					contentTitle, contentText, contentIntent);
 			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 					mNotification);
+			errorToast.show();
+		} catch (RemoteException re) {
+			contentTitle = "Remote Error";
+			contentText = "The contacts could not be updated.  Aborting.";
+			mNotification.setLatestEventInfo(mService.getApplicationContext(),
+					contentTitle, contentText, contentIntent);
+			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
+					mNotification);
+			errorToast.show();
 		}
-
 	}
 
 	@Override
@@ -141,7 +156,10 @@ public class ContactDownloadAsyncTask extends
 					contentTitle, contentText, contentIntent);
 			mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 					mNotification);
+			Toast.makeText(mService.getApplicationContext(),
+					"Finished! " + contentText, Toast.LENGTH_LONG).show();
 		} else {
+
 			long milliseconds = values[0].getRemainingTime().getTime() / 1000;
 			contentText = "Time: " + milliseconds;
 			if (values[0].getGroupMax() != WebWrapper.NO_GROUP_MAX) {

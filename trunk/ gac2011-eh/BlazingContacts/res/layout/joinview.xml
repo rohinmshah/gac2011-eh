@@ -21,7 +21,7 @@
 		   		<TextView android:text="Your Info:" android:id="@+id/yourInfoLabel" android:textSize="9pt" android:layout_height="wrap_content" android:layout_width="fill_parent"></TextView>
 		   		<LinearLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:orientation="vertical">
 		   			<Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/chooseContact" android:text="Choose Your Contact" android:textSize="7pt" android:onClick="onChooseContactClick"></Button>
-			 		<TextView android:hint="Name:" android:id="@+id/nameCB" android:textSize="9pt" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_gravity="center_horizontal"></TextView>
+			 		<TextView android:hint="Name:" android:id="@+id/nameCB" android:textSize="14pt" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_gravity="center_horizontal"></TextView>
 			 		<CheckBox android:layout_width="wrap_content" android:hint="Phone Number" android:layout_height="wrap_content" android:id="@+id/phoneNumberCB" android:checked="true"></CheckBox>
 					<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="Email" android:id="@+id/emailCB" android:checked="true"></CheckBox>
 				</LinearLayout>
