@@ -87,7 +87,7 @@ public class Contact {
 	 */
 	public static Contact fromJSONObject(JSONObject jsonObject) throws JSONException
 	{
-		JSONObject contact = jsonObject.getJSONObject(JSON_DATA_ATTRIBUTE);
+		JSONObject contact = new JSONObject(jsonObject.getString(JSON_DATA_ATTRIBUTE));
 		String name = contact.getString(JSON_NAME_ATTRIBUTE);
 		String phoneNumber = contact.getString(JSON_PHONE_ATTRIBUTE);
 		String email = contact.getString(JSON_EMAIL_ATTRIBUTE);
