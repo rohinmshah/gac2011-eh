@@ -67,16 +67,16 @@ public class StartActivity extends GroupActivity {
 				SharedPreferences joinData = getSharedPreferences(
 						getString(R.string.join_preference), MODE_PRIVATE);
 				Editor e = joinData.edit();
-				e.putString(getString(R.string.start_contact_name), start_name
+				e.putString(getString(R.string.join_contact_name), start_name
 						.getText().toString());
-				e.putBoolean(getString(R.string.start_phone_checked),
+				e.putBoolean(getString(R.string.join_phone_checked),
 						start_phone.isChecked());
-				e.putString(getString(R.string.start_contact_phone),
-						start_phone.getText().toString());
-				e.putBoolean(getString(R.string.start_email_checked),
+				e.putString(getString(R.string.join_contact_phone), start_phone
+						.getText().toString());
+				e.putBoolean(getString(R.string.join_email_checked),
 						start_email.isChecked());
-				e.putString(getString(R.string.start_contact_email),
-						start_email.getText().toString());
+				e.putString(getString(R.string.join_contact_email), start_email
+						.getText().toString());
 				e.commit();
 
 				Intent i = new Intent(StartActivity.this,
