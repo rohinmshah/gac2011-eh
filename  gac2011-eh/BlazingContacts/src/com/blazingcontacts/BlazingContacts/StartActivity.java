@@ -64,6 +64,21 @@ public class StartActivity extends GroupActivity {
 			 */
 			public void onClick(View v) {
 				startClicked = true;
+				SharedPreferences joinData = getSharedPreferences(
+						getString(R.string.join_preference), MODE_PRIVATE);
+				Editor e = joinData.edit();
+				e.putString(getString(R.string.start_contact_name), start_name
+						.getText().toString());
+				e.putBoolean(getString(R.string.start_phone_checked),
+						start_phone.isChecked());
+				e.putString(getString(R.string.start_contact_phone),
+						start_phone.getText().toString());
+				e.putBoolean(getString(R.string.start_email_checked),
+						start_email.isChecked());
+				e.putString(getString(R.string.start_contact_email),
+						start_email.getText().toString());
+				e.commit();
+
 				Intent i = new Intent(StartActivity.this,
 						ContactDownloadService.class);
 				i.putExtra(GROUP_TYPE, TYPE_START);
@@ -105,7 +120,7 @@ public class StartActivity extends GroupActivity {
 						numberOfPeople = Integer.parseInt(numPeople);
 					}
 					i.putExtra(MAX_PEOPLE, numberOfPeople);
-				} catch (NumberFormatException e) {
+				} catch (NumberFormatException nfe) {
 					Toast.makeText(
 							StartActivity.this,
 							"Time and Number of People fields must be numbers!",
@@ -130,28 +145,14 @@ public class StartActivity extends GroupActivity {
 
 		start_name.setText(data.getString(
 				getString(R.string.start_contact_name), ""));
-		if (start_name.getText().toString().equals("")) {
-			data = getSharedPreferences(getString(R.string.join_preference),
-					MODE_PRIVATE);
-			start_phone.setChecked(data.getBoolean(
-					getString(R.string.join_phone_checked), true));
-			start_phone.setText(data.getString(
-					getString(R.string.join_contact_phone), ""));
-			start_email.setChecked(data.getBoolean(
-					getString(R.string.join_email_checked), true));
-			start_email.setText(data.getString(
-					getString(R.string.join_contact_email), ""));
-		} else {
-			start_phone.setChecked(data.getBoolean(
-					getString(R.string.start_phone_checked), true));
-			start_phone.setText(data.getString(
-					getString(R.string.start_contact_phone), ""));
-			start_email.setChecked(data.getBoolean(
-					getString(R.string.start_email_checked), true));
-			start_email.setText(data.getString(
-					getString(R.string.start_contact_email), ""));
-		}
-
+		start_phone.setChecked(data.getBoolean(
+				getString(R.string.start_phone_checked), true));
+		start_phone.setText(data.getString(
+				getString(R.string.start_contact_phone), ""));
+		start_email.setChecked(data.getBoolean(
+				getString(R.string.start_email_checked), true));
+		start_email.setText(data.getString(
+				getString(R.string.start_contact_email), ""));
 		startClicked = false;
 	}
 
@@ -162,8 +163,8 @@ public class StartActivity extends GroupActivity {
 				getString(R.string.start_preference), MODE_PRIVATE);
 		Editor e = data.edit();
 		e.clear();
-		e.putString(getString(R.string.start_contact_name),
-				((TextView) findViewById(R.id.nameCB)).getText().toString());
+		e.putString(getString(R.string.start_contact_name), start_name
+				.getText().toString());
 		e.putBoolean(getString(R.string.start_phone_checked),
 				start_phone.isChecked());
 		e.putString(getString(R.string.start_contact_phone), start_phone
