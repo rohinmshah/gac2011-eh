@@ -155,7 +155,7 @@ public class WebWrapper {
 		// Determine remaining time
 		isoExpirationDate = result.getString(JSON_DATE_ATTRIBUTE);
 		expiration = isoStringToDate(isoExpirationDate);
-		current_date = new Date();
+		current_date = toUMTDate(new Date());
 		difference = new Date(expiration.getTime() - current_date.getTime());
 		
 		// Parse other data
@@ -413,5 +413,10 @@ public class WebWrapper {
 		Date now = new Date();
 		long totalMilliSec = now.getTime() + milliseconds;
 		return new Date(totalMilliSec);
+	}
+	
+	private Date toUMTDate(Date target) throws ParseException
+	{
+		return isoStringToDate(dateToISOString(target));
 	}
 }
