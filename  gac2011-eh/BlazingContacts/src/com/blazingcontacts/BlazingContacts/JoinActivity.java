@@ -46,6 +46,22 @@ public class JoinActivity extends GroupActivity {
 			 */
 			public void onClick(View v) {
 				joinClicked = true;
+
+				SharedPreferences startData = getSharedPreferences(
+						getString(R.string.start_preference), MODE_PRIVATE);
+				Editor e = startData.edit();
+				e.putString(getString(R.string.start_contact_name), join_name
+						.getText().toString());
+				e.putBoolean(getString(R.string.start_phone_checked),
+						join_phone.isChecked());
+				e.putString(getString(R.string.start_contact_phone), join_phone
+						.getText().toString());
+				e.putBoolean(getString(R.string.start_email_checked),
+						join_email.isChecked());
+				e.putString(getString(R.string.start_contact_email), join_email
+						.getText().toString());
+				e.commit();
+
 				Intent i = new Intent(JoinActivity.this,
 						ContactDownloadService.class);
 				i.putExtra(GROUP_TYPE, TYPE_JOIN);
