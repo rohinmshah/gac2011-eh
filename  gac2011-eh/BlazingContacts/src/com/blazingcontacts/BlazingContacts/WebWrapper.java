@@ -156,7 +156,7 @@ public class WebWrapper {
 		isoExpirationDate = result.getString(JSON_DATE_ATTRIBUTE);
 		expiration = isoStringToDate(isoExpirationDate);
 		current_date = new Date();
-		difference = new Date(expiration.getTime() - current_date.getTime());
+		difference = new Date(current_date.getTime() - expiration.getTime());
 		
 		// Parse other data
 		groupMax = result.getInt(JSON_GROUP_MAX_ATTRIBUTE);
