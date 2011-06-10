@@ -58,7 +58,7 @@ public class WebWrapper {
 	private static final String CONTACT_RESOURCE = "/contact";
 	private static final String JSON_DATE_ATTRIBUTE = "expiration";
 	private static final String JSON_GROUP_MAX_ATTRIBUTE = "max_members";
-	private static final String JSON_MEMBER_COUNT_ATTRIBUTE = "member_count";
+	private static final String JSON_MEMBER_COUNT_ATTRIBUTE = "current_users";
 	private static final String JSON_CONTACTS_ATTRIBUTE = "contacts";
 	private static final String JSON_ERROR_NUM_ATTRIBUTE = "error";
 	private static final String JSON_ERROR_MESSAGE_ATTRIBUTE = "error_message";
@@ -100,7 +100,7 @@ public class WebWrapper {
 	 * @param newGroupName The name of the group to join
 	 * @param newPassword The password to use
 	 * @param newContact The local user's self-selected contact information
-	 * @param expiration The Date after which the group will be deleted (set in user timezone)
+	 * @param expiration The Date after which the group will be deleted
 	 * @param groupMax The maximum number of people allowed in the group
 	 * @throws JSONException 
 	 * @throws IOException 
@@ -200,7 +200,7 @@ public class WebWrapper {
 			javaContactList.set(i, Contact.fromJSON((String) jsonContactList.get(i)) ); // TODO: a bit kludgy
 		
 		// TODO: The cast to array is a bit kludgy
-		return (Contact []) javaContactList.toArray();
+		return (Contact []) (javaContactList.toArray());
 	}
 	
 	/**
