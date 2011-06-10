@@ -16,11 +16,10 @@ public class ContactDownloadAsyncTask extends
 		AsyncTask<Intent, GroupStatus, Void> {
 
 	private ContactDownloadService mService;
-	private WebWrapper mWrapper;
+	private WebTestWrapper mWrapper;
 	private GroupStatus mStatus;
 	private Notification mNotification;
 	private NotificationManager mManager;
-	private PendingIntent contentIntent;
 	private int mType;
 	private Toast errorToast;
 
@@ -37,6 +36,10 @@ public class ContactDownloadAsyncTask extends
 	@Override
 	protected Void doInBackground(Intent... params) {
 		CharSequence contentTitle, contentText;
+		Intent notificationIntent = new Intent(mService,
+				ContactDownloadService.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(
+				mService.getApplicationContext(), 0, notificationIntent, 0);
 
 		Intent intent = params[0];
 		Bundle extras = intent.getExtras();
@@ -54,7 +57,7 @@ public class ContactDownloadAsyncTask extends
 				Date time = WebWrapper.getDateFromNow(extras
 						.getLong(StartActivity.LIFETIME_MILLIS));
 				int maxPeople = extras.getInt(StartActivity.MAX_PEOPLE);
-				mWrapper = new WebWrapper(groupName, password, user, time,
+				mWrapper = new WebTestWrapper(groupName, password, user, time,
 						maxPeople);
 			} catch (Exception e) {
 				contentTitle = "Connection failed";
@@ -71,7 +74,7 @@ public class ContactDownloadAsyncTask extends
 
 		case GroupActivity.TYPE_JOIN:
 			try {
-				mWrapper = new WebWrapper(groupName, password, user);
+				mWrapper = new WebTestWrapper(groupName, password, user);
 			} catch (Exception e) {
 				contentTitle = "Connection failed";
 				contentText = "Could not connect to the server.  Aborting.";
@@ -89,7 +92,16 @@ public class ContactDownloadAsyncTask extends
 		return null;
 	}
 
+	/**
+	 * Every second, asks the server for the status, and acts if necessary.
+	 * Sends the GroupStatus to publishProgress so that the notification can be
+	 * updated.
+	 */
 	private void askForStatusLoop() {
+		Intent notificationIntent = new Intent(mService,
+				ContactDownloadService.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(
+				mService.getApplicationContext(), 0, notificationIntent, 0);
 		CharSequence contentTitle = "", contentText = "";
 		try {
 			Thread.sleep(1000);
@@ -146,8 +158,11 @@ public class ContactDownloadAsyncTask extends
 
 	@Override
 	protected void onProgressUpdate(GroupStatus... values) {
-		CharSequence contentTitle = "Progress Update";
-		CharSequence contentText = "";
+		CharSequence contentTitle = "Progress Update", contentText = "";
+		Intent notificationIntent = new Intent(mService,
+				ContactDownloadService.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(
+				mService.getApplicationContext(), 0, notificationIntent, 0);
 		if (values[0].isFinished()) {
 			contentTitle = "Finished!";
 			contentText = values[0].getMemberCount()
