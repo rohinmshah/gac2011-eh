@@ -7,15 +7,18 @@ public class WebTestWrapper {
 	private int remainingTime = 20000;
 	private int groupMax;
 	private int members = 0;
+	private Contact mContact;
 
 	public WebTestWrapper(String newGroupName, String newPassword,
 			Contact newContact) {
 		groupMax = WebWrapper.NO_GROUP_MAX;
+		mContact = newContact;
 	}
 
 	public WebTestWrapper(String newGroupName, String newPassword,
 			Contact newContact, Date expiration, int groupMax) {
 		this.groupMax = groupMax;
+		mContact = newContact;
 	}
 
 	public GroupStatus getStatus() {
@@ -29,8 +32,7 @@ public class WebTestWrapper {
 	public Contact[] downloadContactInfo() {
 		Contact[] res = new Contact[members];
 		for (int i = 0; i < members; i++) {
-			res[i] = new Contact("Test" + i + " Name", "(823) 234-2985",
-					"testname@gmail.com");
+			res[i] = mContact;
 		}
 		return res;
 	}
