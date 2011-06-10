@@ -2,4 +2,21 @@
 <resources>
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">Blazing Contacts</string>
+    <string name="start_preference">StartActivity Preferences</string>
+    <string name="start_group_name">StartActivity Group Name Field</string>
+    <string name="start_contact_name">StartActivity Name Field</string>
+    <string name="start_contact_phone">StartActivity Phone Number Field</string>
+    <string name="start_contact_email">StartActivity Email Field</string>
+    <string name="start_phone_checked">StartActivity Phone Number Checked</string>
+    <string name="start_email_checked">StartActivity Email Checked</string>
+    <string name="start_time_to_wait">StartActivity Expiry Time</string>
+    <string name="start_time_units">StartActivity Expiry Time Units</string>
+    <string name="start_max_people">StartActivity Group Maximum Number of People</string>
+    <string name="join_preference">JoinActivity Preferences</string>
+    <string name="join_group_name">JoinActivity Group Name Field</string>
+    <string name="join_contact_name">JoinActivity Name Field</string>
+    <string name="join_contact_phone">JoinActivity Phone Number Field</string>
+    <string name="join_contact_email">JoinActivity Email Field</string>
+    <string name="join_phone_checked">JoinActivity Phone Number Checked</string>
+    <string name="join_email_checked">JoinActivity Email Checked</string>
 </resources>
