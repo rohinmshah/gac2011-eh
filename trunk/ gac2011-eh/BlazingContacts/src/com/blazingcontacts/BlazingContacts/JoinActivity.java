@@ -87,16 +87,7 @@ public class JoinActivity extends GroupActivity {
 				getString(R.string.join_preference), MODE_PRIVATE);
 		join_group_name.setText(data.getString(
 				getString(R.string.join_group_name), ""));
-		join_name.setText(data.getString(getString(R.string.join_contact_name),
-				""));
-		join_phone.setChecked(data.getBoolean(
-				getString(R.string.join_phone_checked), true));
-		join_phone.setText(data.getString(
-				getString(R.string.join_contact_phone), ""));
-		join_email.setChecked(data.getBoolean(
-				getString(R.string.join_email_checked), true));
-		join_email.setText(data.getString(
-				getString(R.string.join_contact_email), ""));
+		// Contact fields will be populated in onResume() by updateContact().
 
 		joinClicked = false;
 
@@ -129,6 +120,7 @@ public class JoinActivity extends GroupActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		updateContact();
 		if (join_name.getText().toString().equals("")) {
 			join_begin.setVisibility(Button.INVISIBLE);
 		} else {
@@ -150,5 +142,20 @@ public class JoinActivity extends GroupActivity {
 		join_phone.setText(phoneNumber);
 		join_email.setText(email);
 		join_begin.setVisibility(Button.VISIBLE);
+	}
+
+	private void updateContact() {
+		SharedPreferences data = getSharedPreferences(
+				getString(R.string.join_preference), MODE_PRIVATE);
+		join_name.setText(data.getString(getString(R.string.join_contact_name),
+				""));
+		join_phone.setChecked(data.getBoolean(
+				getString(R.string.join_phone_checked), true));
+		join_phone.setText(data.getString(
+				getString(R.string.join_contact_phone), ""));
+		join_email.setChecked(data.getBoolean(
+				getString(R.string.join_email_checked), true));
+		join_email.setText(data.getString(
+				getString(R.string.join_contact_email), ""));
 	}
 }
