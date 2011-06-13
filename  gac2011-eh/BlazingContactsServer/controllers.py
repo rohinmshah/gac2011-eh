@@ -108,7 +108,7 @@ class GroupController(JSONController):
 		# Render JSON representation
 		self.render_json(group)		
 	
-	def put(self):
+	def post(self):
 		
 		# Extract escaped values
 		# TODO: This kludge is a result of a bug in Google's App Engine
@@ -143,7 +143,7 @@ class GroupController(JSONController):
 		
 		self.render_json(new_group)
 	
-	def post(self):
+	def put(self):
 		
 		# Get the name and group
 		name = self.request.get("name")
@@ -216,7 +216,7 @@ class ContactController(JSONController):
 		# Render JSON representation
 		self.render_json(contact)	
 	
-	def put(self):
+	def post(self):
 		
 		# Extract escaped values
 		# TODO: This kludge is a result of a bug in Google's App Engine
@@ -252,7 +252,7 @@ class ContactController(JSONController):
 		# Render result
 		self.render_json(new_contact)
 	
-	def post(self):
+	def put(self):
 		try:
 			contact_id = int(self.request.get("contact_id"))
 			group_name = cgi.escape(self.request.get("name"))
