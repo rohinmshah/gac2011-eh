@@ -62,6 +62,6 @@ public class GroupStatus {
 	 * @return - true if the group has expired
 	 */
 	public boolean isFinished() {
-		return (groupMax <= memberCount); //|| remainingTime.getTime() <= 0;
+		return (groupMax <= memberCount) || remainingTime.getTime() <= 0;
 	}
 }

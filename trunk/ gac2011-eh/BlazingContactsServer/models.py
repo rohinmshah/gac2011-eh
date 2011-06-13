@@ -108,7 +108,8 @@ class Group(JSONSerializable):
 		""" Returns true if this group information is no longer needed
 		
 		Returns true if the number of downloads equals the number of people in the group and the maximum group member count or if the current time execeeds that of the expiration time"""
-		return (self.max_members == self.current_users and self.max_members == self.times_downloaded) or self.expiration < datetime.datetime.now()
+		virtual_time = datetime.datetime.now() - datetime.timedelta(minutes=5)
+		return (self.max_members == self.current_users and self.max_members == self.times_downloaded) or self.expiration < virtual_time
 
 class Contact(JSONSerializable):
 	""" Model to contain information about a BlazingContacts client """

@@ -124,7 +124,7 @@ public class WebWrapper {
 		parameters.add(new BasicNameValuePair(GROUP_MAX_MEMBERS_PARAMETER, new Integer(groupMax).toString()));
 		
 		// Create group on server
-		executeRequest(GROUP_RESOURCE, HttpMethod.PUT, parameters);
+		executeRequest(GROUP_RESOURCE, HttpMethod.POST, parameters);
 		
 		// Send contact information to server
 		addContactInfo(newContact);
@@ -219,7 +219,7 @@ public class WebWrapper {
 		parameters.add(new BasicNameValuePair( DATA_PARAMETER, info.toJSON() ));
 		
 		// Execute the request
-		executeRequest(CONTACT_RESOURCE, HttpMethod.PUT, parameters);
+		executeRequest(CONTACT_RESOURCE, HttpMethod.POST, parameters);
 	}
 	
 	/**
