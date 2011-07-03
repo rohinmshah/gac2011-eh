@@ -17,7 +17,7 @@ public class ContactDownloadAsyncTask extends
 		AsyncTask<Intent, GroupStatus, Void> {
 
 	private ContactDownloadService mService;
-	private WebWrapper mWrapper;
+	private WebTestWrapper mWrapper;
 	private GroupStatus mStatus;
 	private Notification mNotification;
 	private NotificationManager mManager;
@@ -62,7 +62,7 @@ public class ContactDownloadAsyncTask extends
 				Date time = WebWrapper.getDateFromNow(extras
 						.getLong(StartActivity.LIFETIME_MILLIS));
 				int maxPeople = extras.getInt(StartActivity.MAX_PEOPLE);
-				mWrapper = new WebWrapper(groupName, password, user, time,
+				mWrapper = new WebTestWrapper(groupName, password, user, time,
 						maxPeople);
 			} catch (Exception e) {
 				contentTitle = "Connection failed";
@@ -79,7 +79,7 @@ public class ContactDownloadAsyncTask extends
 
 		case GroupActivity.TYPE_JOIN:
 			try {
-				mWrapper = new WebWrapper(groupName, password, user);
+				mWrapper = new WebTestWrapper(groupName, password, user);
 			} catch (Exception e) {
 				contentTitle = "Connection failed";
 				contentText = "Could not connect to the server.  Aborting.";
@@ -103,8 +103,7 @@ public class ContactDownloadAsyncTask extends
 	 * updated.
 	 */
 	private void askForStatusLoop() {
-		while(true)
-		{
+		while (true) {
 			Intent notificationIntent = new Intent(mService,
 					ContactDownloadService.class);
 			PendingIntent contentIntent = PendingIntent.getActivity(
@@ -120,6 +119,7 @@ public class ContactDownloadAsyncTask extends
 					}
 					ContactsProviderWrapper cpw = new ContactsProviderWrapper(
 							mService.getApplicationContext(), 0);
+					int i = 0;
 					for (Contact contactToAdd : contactsToAdd) {
 						if (!isUser(contactToAdd)) {
 							cpw.addContact(contactToAdd);
@@ -131,40 +131,52 @@ public class ContactDownloadAsyncTask extends
 					publishProgress(mStatus);
 				}
 			} catch (InterruptedException i) {
+				Log.e("InterruptedException", i.getMessage());
 				contentTitle = "Interruption";
 				contentText = "The service was interrupted while waiting for the group to fill.  Aborting.";
-				mNotification.setLatestEventInfo(mService.getApplicationContext(),
-						contentTitle, contentText, contentIntent);
+				mNotification.setLatestEventInfo(
+						mService.getApplicationContext(), contentTitle,
+						contentText, contentIntent);
 				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 						mNotification);
 				errorToast.show();
+				break;
 			} catch (OperationApplicationException oae) {
+				Log.e("OperationApplicationException", oae.getMessage());
 				contentTitle = "Operation Error";
 				contentText = "The contacts could not be updated.  Aborting.";
-				mNotification.setLatestEventInfo(mService.getApplicationContext(),
-						contentTitle, contentText, contentIntent);
+				mNotification.setLatestEventInfo(
+						mService.getApplicationContext(), contentTitle,
+						contentText, contentIntent);
 				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 						mNotification);
 				errorToast.show();
+				break;
 			} catch (RemoteException re) {
+				Log.e("RemoteException", re.getMessage());
 				contentTitle = "Remote Error";
 				contentText = "The contacts could not be updated.  Aborting.";
-				mNotification.setLatestEventInfo(mService.getApplicationContext(),
-						contentTitle, contentText, contentIntent);
+				mNotification.setLatestEventInfo(
+						mService.getApplicationContext(), contentTitle,
+						contentText, contentIntent);
 				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 						mNotification);
 				errorToast.show();
+				break;
 			} catch (Exception e) {
+				Log.e("Exception", e.getMessage());
 				contentTitle = "Web service problem";
 				contentText = e.getMessage();
 				if (contentText == null || contentText.equals("")) {
 					contentText = "Unknown error";
 				}
-				mNotification.setLatestEventInfo(mService.getApplicationContext(),
-						contentTitle, contentText, null);
+				mNotification.setLatestEventInfo(
+						mService.getApplicationContext(), contentTitle,
+						contentText, null);
 				mManager.notify(ContactDownloadService.NOTIFICATION_ID,
 						mNotification);
 				errorToast.show();
+				break;
 			}
 		}
 	}

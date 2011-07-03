@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.OperationApplicationException;
+import android.database.Cursor;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
+import android.util.Log;
 
 /**
  * Simplified interface to the Android native contacts provider
@@ -34,39 +36,59 @@ public class ContactsProviderWrapper {
 	 */
 	public void addContact(Contact newContact)
 			throws OperationApplicationException, RemoteException {
-		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
-		ops.add(ContentProviderOperation
-				.newInsert(ContactsContract.RawContacts.CONTENT_URI)
-				.withValue(ContactsContract.RawContacts.ACCOUNT_TYPE,
-						accountType)
-				.withValue(ContactsContract.RawContacts.ACCOUNT_NAME,
-						newContact.getName()).build()); // The name
-		ops.add(ContentProviderOperation
-				.newInsert(ContactsContract.Data.CONTENT_URI)
-				.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-				.withValue(ContactsContract.Data.MIMETYPE,
-						StructuredName.CONTENT_ITEM_TYPE)
-				.withValue(StructuredName.DISPLAY_NAME, newContact.getName())
-				.build()); // The name field
-		ops.add(ContentProviderOperation
-				.newInsert(ContactsContract.Data.CONTENT_URI)
-				.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-				.withValue(ContactsContract.Data.MIMETYPE,
-						Phone.CONTENT_ITEM_TYPE)
-				.withValue(Phone.NUMBER, newContact.getPhoneNumber())
-				.withValue(Phone.TYPE, Phone.TYPE_HOME).build()); // The phone
-																	// number
-																	// field
-		ops.add(ContentProviderOperation
-				.newInsert(ContactsContract.Data.CONTENT_URI)
-				.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-				.withValue(ContactsContract.Data.MIMETYPE,
-						Email.CONTENT_ITEM_TYPE)
-				.withValue(Email.DATA, newContact.getEmail())
-				.withValue(Email.TYPE, Email.TYPE_HOME).build()); // The email
-																	// field
+		String[] columns = newContact.getColumns();
+		String where = ContactsContract.Data.DISPLAY_NAME + " = ?";
+		String[] whereParameters = { newContact.getName() };
+		Cursor contacts = parent.getContentResolver().query(
+				ContactsContract.Data.CONTENT_URI, columns, where,
+				whereParameters, null);
+		if (contacts.moveToFirst()) {
+			Log.i("addContact", "Contact already exists");
+			// Toast.makeText(parent,
+			// newContact.getName() + " is already in your contacts",
+			// Toast.LENGTH_SHORT).show();
+		} else {
+			ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+			ops.add(ContentProviderOperation
+					.newInsert(ContactsContract.RawContacts.CONTENT_URI)
+					.withValue(ContactsContract.RawContacts.ACCOUNT_TYPE,
+							accountType)
+					.withValue(ContactsContract.RawContacts.ACCOUNT_NAME,
+							newContact.getName()).build()); // The name
+			ops.add(ContentProviderOperation
+					.newInsert(ContactsContract.Data.CONTENT_URI)
+					.withValueBackReference(
+							ContactsContract.Data.RAW_CONTACT_ID, 0)
+					.withValue(ContactsContract.Data.MIMETYPE,
+							StructuredName.CONTENT_ITEM_TYPE)
+					.withValue(StructuredName.DISPLAY_NAME,
+							newContact.getName()).build()); // The name field
+			ops.add(ContentProviderOperation
+					.newInsert(ContactsContract.Data.CONTENT_URI)
+					.withValueBackReference(
+							ContactsContract.Data.RAW_CONTACT_ID, 0)
+					.withValue(ContactsContract.Data.MIMETYPE,
+							Phone.CONTENT_ITEM_TYPE)
+					.withValue(Phone.NUMBER, newContact.getPhoneNumber())
+					.withValue(Phone.TYPE, Phone.TYPE_HOME).build()); // The
+																		// phone
+																		// number
+																		// field
+			ops.add(ContentProviderOperation
+					.newInsert(ContactsContract.Data.CONTENT_URI)
+					.withValueBackReference(
+							ContactsContract.Data.RAW_CONTACT_ID, 0)
+					.withValue(ContactsContract.Data.MIMETYPE,
+							Email.CONTENT_ITEM_TYPE)
+					.withValue(Email.DATA, newContact.getEmail())
+					.withValue(Email.TYPE, Email.TYPE_HOME).build()); // The
+																		// email
+																		// field
 
-		parent.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+			parent.getContentResolver().applyBatch(ContactsContract.AUTHORITY,
+					ops);
+		}
+		contacts.close();
 	}
 
 }
