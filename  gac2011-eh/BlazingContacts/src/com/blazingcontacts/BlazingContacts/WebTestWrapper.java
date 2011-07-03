@@ -32,7 +32,8 @@ public class WebTestWrapper {
 	public Contact[] downloadContactInfo() {
 		Contact[] res = new Contact[members];
 		for (int i = 0; i < members; i++) {
-			res[i] = mContact;
+			res[i] = new Contact("Test Name", "9224183954",
+					"testname@gmail.com");
 		}
 		return res;
 	}

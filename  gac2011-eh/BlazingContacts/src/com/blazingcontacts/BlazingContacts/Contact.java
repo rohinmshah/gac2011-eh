@@ -3,12 +3,15 @@ package com.blazingcontacts.BlazingContacts;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.provider.ContactsContract;
+
 /**
  * Contact with general personal information
+ * 
  * @author Rohin
  */
 public class Contact {
- 
+
 	private static final String JSON_NAME_ATTRIBUTE = "name";
 	private static final String JSON_PHONE_ATTRIBUTE = "phone";
 	private static final String JSON_EMAIL_ATTRIBUTE = "email";
@@ -54,8 +57,9 @@ public class Contact {
 
 	/**
 	 * Returns a JSON encoded version of this contact
+	 * 
 	 * @return A JSON encoded string representation of this object
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
 	public String toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
@@ -66,32 +70,51 @@ public class Contact {
 	}
 
 	/**
+	 * At present, this method always returns the same array. However, in the
+	 * future if more data fields are allowed, it may be changed to return only
+	 * those columns for which this Contact holds data.
+	 * 
+	 * @return - the string array which can be used as a projection in an SQL
+	 *         query to find only the required columns.
+	 */
+	public String[] getColumns() {
+		return new String[] { ContactsContract.Data.DISPLAY_NAME,
+				ContactsContract.CommonDataKinds.Phone.NUMBER,
+				ContactsContract.CommonDataKinds.Email.DISPLAY_NAME };
+	}
+
+	/**
 	 * Creates a new contact by through the provided JSON encoded string
-	 * @param json JSON encoded string
+	 * 
+	 * @param json
+	 *            JSON encoded string
 	 * @return Contact instance from json
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
 	public static Contact fromJSON(String json) throws JSONException {
-		
+
 		// Parse JSON
 		JSONObject jsonObject = new JSONObject(json);
 		return fromJSONObject(jsonObject);
 	}
-	
+
 	/**
 	 * Creates a new contact by through the provided JSON object
-	 * @param jsonObject JSON decoded object
+	 * 
+	 * @param jsonObject
+	 *            JSON decoded object
 	 * @return Contact instance from json
-	 * @throws JSONException 
-	 * @throws JSONException 
+	 * @throws JSONException
+	 * @throws JSONException
 	 */
-	public static Contact fromJSONObject(JSONObject jsonObject) throws JSONException
-	{
-		JSONObject contact = new JSONObject(jsonObject.getString(JSON_DATA_ATTRIBUTE));
+	public static Contact fromJSONObject(JSONObject jsonObject)
+			throws JSONException {
+		JSONObject contact = new JSONObject(
+				jsonObject.getString(JSON_DATA_ATTRIBUTE));
 		String name = contact.getString(JSON_NAME_ATTRIBUTE);
 		String phoneNumber = contact.getString(JSON_PHONE_ATTRIBUTE);
 		String email = contact.getString(JSON_EMAIL_ATTRIBUTE);
-		
+
 		return new Contact(name, phoneNumber, email);
 	}
 
