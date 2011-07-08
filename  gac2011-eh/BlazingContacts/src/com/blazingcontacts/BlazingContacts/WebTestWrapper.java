@@ -23,18 +23,22 @@ public class WebTestWrapper {
 
 	public GroupStatus getStatus() {
 		remainingTime -= 1000;
-		if (Math.random() > 0.8) {
+		if (Math.random() > 0.5) {
 			members++;
 		}
 		return new GroupStatus(new Date(remainingTime), groupMax, members);
 	}
 
 	public Contact[] downloadContactInfo() {
-		Contact[] res = new Contact[members];
-		for (int i = 0; i < members; i++) {
-			res[i] = new Contact("Test Name", "9224183954",
-					"testname@gmail.com");
-		}
-		return res;
+		// Contact[] res = new Contact[members];
+		// for (int i = 0; i < members; i++) {
+		// res[i] = new Contact("Test Name", "9224183954",
+		// "testname@gmail.com");
+		// }
+		// return res;
+		return new Contact[] {
+				new Contact("Test Name", "", "testname@gmail.com"),
+				new Contact("Test Name", "9224183954", "testname@gmail.com"),
+				new Contact("Test Name", "", "testname@yahoo.com") };
 	}
 }

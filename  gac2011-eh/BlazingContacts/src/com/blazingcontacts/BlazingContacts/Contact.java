@@ -42,6 +42,13 @@ public class Contact {
 	}
 
 	/**
+	 * @return whether or not this contact has a phone number
+	 */
+	public boolean hasPhoneNumber() {
+		return phoneNumber != null && !phoneNumber.equals("");
+	}
+
+	/**
 	 * @return the phone number of this Contact
 	 */
 	public String getPhoneNumber() {
@@ -49,10 +56,32 @@ public class Contact {
 	}
 
 	/**
+	 * @return whether or not this contact has an email
+	 */
+	public boolean hasEmail() {
+		return email != null && !email.equals("");
+	}
+
+	/**
 	 * @return the email address of this Contact
 	 */
 	public String getEmail() {
 		return email;
+	}
+
+	/**
+	 * At present, this method always returns the same array. However, in the
+	 * future if more data fields are allowed, it may be changed to return only
+	 * those columns for which this Contact holds data.
+	 * 
+	 * @return - the string array which can be used as a projection in an SQL
+	 *         query to find only the required columns.
+	 */
+	public String[] getColumns() {
+		return new String[] { ContactsContract.Data._ID,
+				ContactsContract.Data.DISPLAY_NAME,
+				ContactsContract.CommonDataKinds.Phone.NUMBER,
+				ContactsContract.CommonDataKinds.Email.DISPLAY_NAME };
 	}
 
 	/**
@@ -67,20 +96,6 @@ public class Contact {
 		json.put(JSON_PHONE_ATTRIBUTE, phoneNumber);
 		json.put(JSON_EMAIL_ATTRIBUTE, email);
 		return json.toString();
-	}
-
-	/**
-	 * At present, this method always returns the same array. However, in the
-	 * future if more data fields are allowed, it may be changed to return only
-	 * those columns for which this Contact holds data.
-	 * 
-	 * @return - the string array which can be used as a projection in an SQL
-	 *         query to find only the required columns.
-	 */
-	public String[] getColumns() {
-		return new String[] { ContactsContract.Data.DISPLAY_NAME,
-				ContactsContract.CommonDataKinds.Phone.NUMBER,
-				ContactsContract.CommonDataKinds.Email.DISPLAY_NAME };
 	}
 
 	/**
