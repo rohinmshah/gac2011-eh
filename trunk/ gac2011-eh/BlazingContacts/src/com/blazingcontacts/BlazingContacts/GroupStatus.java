@@ -12,7 +12,6 @@ public class GroupStatus {
 
 	private Date remainingTime;
 	private int groupMax, memberCount;
-	private boolean finished;
 
 	/**
 	 * Creates a new GroupStatus.
