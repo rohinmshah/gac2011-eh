@@ -18,7 +18,7 @@ public class StartActivity extends GroupActivity {
 
 	public static final String LIFETIME_MILLIS = "Lifetime in milliseconds";
 	public static final String MAX_PEOPLE = "Maximum number of people";
-	public static final int MAX_TIME_MILLIS = 21600000;
+	public static final int MAX_TIME_MILLIS = 3600000;
 
 	private TextView start_group_name;
 	private TextView start_name;
@@ -37,10 +37,9 @@ public class StartActivity extends GroupActivity {
 		// Remove title bar
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		String array_spinner[] = { "sec", "min", "hour" };
-
 		setContentView(R.layout.secondview);
 
+		// Get the various views in this activity
 		start_group_name = (TextView) findViewById(R.id.groupName);
 		start_name = (TextView) findViewById(R.id.nameCB);
 		start_phone = (CheckBox) findViewById(R.id.phoneNumberCB);
@@ -50,20 +49,53 @@ public class StartActivity extends GroupActivity {
 		start_time_units = (Spinner) findViewById(R.id.timeSpinner);
 		start_begin = (Button) findViewById(R.id.start_begin);
 
+		// Set the spinner for the time units
+		String array_spinner[] = { "sec", "min", "hour" };
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, array_spinner);
 		start_time_units.setAdapter(adapter);
 
+		// Initialize the values for each of the views to whatever was held
+		// previously, or the default if there was no previous value.
+		SharedPreferences data = getSharedPreferences(
+				getString(R.string.start_preference), MODE_PRIVATE);
+		start_group_name.setText(data.getString(
+				getString(R.string.start_group_name), ""));
+		start_time.setText(data.getString(
+				getString(R.string.start_time_to_wait), "2"));
+		start_time_units.setSelection(data.getInt(
+				getString(R.string.start_time_units), 1));
+		start_max_people.setText(data.getString(
+				getString(R.string.start_max_people), ""));
+
+		start_name.setText(data.getString(
+				getString(R.string.start_contact_name), ""));
+		start_phone.setChecked(data.getBoolean(
+				getString(R.string.start_phone_checked), true));
+		start_phone.setText(data.getString(
+				getString(R.string.start_contact_phone), ""));
+		start_email.setChecked(data.getBoolean(
+				getString(R.string.start_email_checked), true));
+		start_email.setText(data.getString(
+				getString(R.string.start_contact_email), ""));
+		startClicked = false;
+
+		// Create the method that will be called when the start button is
+		// clicked.
 		start_begin.setOnClickListener(new OnClickListener() {
 			/*
-			 * The method that is called when the start button is clicked. Not
-			 * yet fully implemented. Should close the current activity and
-			 * start a ContactDownloadService.
+			 * The method that is called when the start button is clicked.
+			 * Closes the current activity and starts a ContactDownloadService.
 			 * 
 			 * @see android.view.View.OnClickListener#onClick(android.view.View)
 			 */
 			public void onClick(View v) {
 				startClicked = true;
+
+				// Now that the start button has been clicked, the data can be
+				// thought of as final. So, the data is added to the joinData so
+				// that the join screen will also be populated by this
+				// information when it is opened.
 				SharedPreferences joinData = getSharedPreferences(
 						getString(R.string.join_preference), MODE_PRIVATE);
 				Editor e = joinData.edit();
@@ -79,6 +111,9 @@ public class StartActivity extends GroupActivity {
 						.getText().toString());
 				e.commit();
 
+				// Create an intent to start the service that will create the
+				// group and download the contacts, and put in the necessary
+				// information.
 				Intent i = new Intent(StartActivity.this,
 						ContactDownloadService.class);
 				i.putExtra(GROUP_TYPE, TYPE_START);
@@ -109,7 +144,7 @@ public class StartActivity extends GroupActivity {
 					}
 					if (milliseconds > MAX_TIME_MILLIS) {
 						Toast.makeText(StartActivity.this,
-								"The time cannot be larger than 6 hours.",
+								"The time cannot be larger than 1 hour.",
 								Toast.LENGTH_LONG).show();
 						return;
 					}
@@ -128,37 +163,17 @@ public class StartActivity extends GroupActivity {
 					return;
 				}
 				startService(i);
+				// Close the current activity.
 				finish();
 			}
 		});
-
-		SharedPreferences data = getSharedPreferences(
-				getString(R.string.start_preference), MODE_PRIVATE);
-		start_group_name.setText(data.getString(
-				getString(R.string.start_group_name), ""));
-		start_time.setText(data.getString(
-				getString(R.string.start_time_to_wait), "2"));
-		start_time_units.setSelection(data.getInt(
-				getString(R.string.start_time_units), 1));
-		start_max_people.setText(data.getString(
-				getString(R.string.start_max_people), ""));
-
-		start_name.setText(data.getString(
-				getString(R.string.start_contact_name), ""));
-		start_phone.setChecked(data.getBoolean(
-				getString(R.string.start_phone_checked), true));
-		start_phone.setText(data.getString(
-				getString(R.string.start_contact_phone), ""));
-		start_email.setChecked(data.getBoolean(
-				getString(R.string.start_email_checked), true));
-		start_email.setText(data.getString(
-				getString(R.string.start_contact_email), ""));
-		startClicked = false;
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
+
+		// Save the data that has been put in the views.
 		SharedPreferences data = getSharedPreferences(
 				getString(R.string.start_preference), MODE_PRIVATE);
 		Editor e = data.edit();
@@ -173,6 +188,7 @@ public class StartActivity extends GroupActivity {
 				start_email.isChecked());
 		e.putString(getString(R.string.start_contact_email), start_email
 				.getText().toString());
+		// Some data should only be kept if the group was not created.
 		if (!startClicked) {
 			e.putString(getString(R.string.start_group_name), start_group_name
 					.getText().toString());
@@ -188,6 +204,8 @@ public class StartActivity extends GroupActivity {
 
 	@Override
 	public void onResume() {
+		// All of the fields are filled in by the call to super, so the only
+		// requirement is to set the visibility of the start button.
 		super.onResume();
 		if (start_name.getText().toString().equals("")) {
 			start_begin.setVisibility(Button.INVISIBLE);

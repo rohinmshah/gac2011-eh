@@ -13,6 +13,14 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * @author Rohin
+ * 
+ *         An AsyncTask (i.e. creates a new thread) which manages the
+ *         notification and downloads the contact information once the group is
+ *         full or has expired.
+ * 
+ */
 public class ContactDownloadAsyncTask extends
 		AsyncTask<Intent, GroupStatus, Void> {
 
@@ -27,6 +35,17 @@ public class ContactDownloadAsyncTask extends
 	private String userPhone;
 	private String userEmail;
 
+	/**
+	 * Creates a new AsyncTask with a notification and a ContactDownloadService.
+	 * 
+	 * @param service
+	 *            - the ContactDownloadService that (presumably) created this
+	 *            AsyncTask.
+	 * @param notification
+	 *            - the notification to use
+	 * @param manager
+	 *            - the manager for the notification
+	 */
 	public ContactDownloadAsyncTask(ContactDownloadService service,
 			Notification notification, NotificationManager manager) {
 		mService = service;
@@ -37,6 +56,14 @@ public class ContactDownloadAsyncTask extends
 				Toast.LENGTH_LONG);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.os.AsyncTask#doInBackground(Params[])
+	 * 
+	 * The method that runs on the new thread. Sets up the AsyncTask by getting
+	 * the information from the given intent, and then calls askForStatusLoop.
+	 */
 	@Override
 	protected Void doInBackground(Intent... params) {
 		CharSequence contentTitle, contentText;
@@ -65,6 +92,7 @@ public class ContactDownloadAsyncTask extends
 				mWrapper = new WebTestWrapper(groupName, password, user, time,
 						maxPeople);
 			} catch (Exception e) {
+				Log.e("ContactDownloadAsyncTask", e.getMessage());
 				contentTitle = "Connection failed";
 				contentText = "Could not connect to the server.  Aborting.";
 				mNotification.setLatestEventInfo(
@@ -98,8 +126,8 @@ public class ContactDownloadAsyncTask extends
 	}
 
 	/**
-	 * Every second, asks the server for the status, and acts if necessary.
-	 * Sends the GroupStatus to publishProgress so that the notification can be
+	 * Asks the server for the status periodically, and acts if necessary. Sends
+	 * the GroupStatus to publishProgress so that the notification can be
 	 * updated.
 	 */
 	private void askForStatusLoop() {
@@ -115,11 +143,10 @@ public class ContactDownloadAsyncTask extends
 				if (mStatus.isFinished()) {
 					Contact[] contactsToAdd = mWrapper.downloadContactInfo();
 					if (mStatus.getMemberCount() != contactsToAdd.length) {
-						Log.e("ERROR", "Inconsistent Data");
+						Log.e("ContactDownloadAsyncTask", "Inconsistent Data");
 					}
 					ContactsProviderWrapper cpw = new ContactsProviderWrapper(
 							mService.getApplicationContext(), 0);
-					int i = 0;
 					for (Contact contactToAdd : contactsToAdd) {
 						if (!isUser(contactToAdd)) {
 							cpw.addContact(contactToAdd);
@@ -181,6 +208,13 @@ public class ContactDownloadAsyncTask extends
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.os.AsyncTask#onProgressUpdate(Progress[])
+	 * 
+	 * Updates the notification upon receiving an update from askForStatusLoop.
+	 */
 	@Override
 	protected void onProgressUpdate(GroupStatus... values) {
 		CharSequence contentTitle = "Progress Update", contentText = "";
@@ -196,8 +230,8 @@ public class ContactDownloadAsyncTask extends
 					"Finished! " + contentText, Toast.LENGTH_LONG).show();
 		} else {
 
-			long milliseconds = values[0].getRemainingTime().getTime() / 1000;
-			contentText = "Time left: " + milliseconds;
+			long seconds = values[0].getRemainingTime().getTime() / 1000;
+			contentText = "Time left: " + seconds;
 			if (values[0].getGroupMax() != WebWrapper.NO_GROUP_MAX) {
 				contentText = contentText
 						+ "\nNumber of people left: "

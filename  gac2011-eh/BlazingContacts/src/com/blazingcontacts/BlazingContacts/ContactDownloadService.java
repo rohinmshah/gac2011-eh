@@ -31,9 +31,8 @@ public class ContactDownloadService extends Service {
 		// Create new notification
 		mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		int icon = android.R.drawable.stat_notify_sync;
-		CharSequence text = null;
 		long when = System.currentTimeMillis();
-		mNotification = new Notification(icon, text, when);
+		mNotification = new Notification(icon, null, when);
 
 		CharSequence contentTitle = "BlazingContacts Status";
 		CharSequence contentText = "Starting the counter";
