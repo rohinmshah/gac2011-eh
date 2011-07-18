@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.RawContacts;
 import android.view.View;
 
 /**
@@ -59,13 +60,30 @@ public abstract class GroupActivity extends Activity {
 		case PICK_CONTACT:
 			if (resultCode == Activity.RESULT_OK) {
 				Uri content = data.getData();
-				Cursor c = managedQuery(content, null, null, null, null);
+				String[] projection = { Contacts._ID, Contacts.DISPLAY_NAME,
+						Contacts.HAS_PHONE_NUMBER };
+				Cursor c = managedQuery(content, projection, null, null, null);
 
 				if (c.moveToFirst()) {
-					String rowId = c.getString(c.getColumnIndex(Contacts._ID));
+					String rowId = c.getString(c
+							.getColumnIndexOrThrow(Contacts._ID));
 					String[] rowIdArray = { rowId };
 					String name = c.getString(c
-							.getColumnIndex(Contacts.DISPLAY_NAME));
+							.getColumnIndexOrThrow(Contacts.DISPLAY_NAME));
+
+					// Code which at present is not useful.
+					Cursor accType = managedQuery(RawContacts.CONTENT_URI,
+							null, RawContacts.CONTACT_ID + " = ?", rowIdArray,
+							null);
+					String accountType = "";
+					if (accType.moveToFirst()) {
+						accountType = accType
+								.getString(accType
+										.getColumnIndexOrThrow(RawContacts.ACCOUNT_TYPE));
+					}
+					accType.close();
+					// End testing
+
 					String phone = "";
 					if (Integer.parseInt(c.getString(c
 							.getColumnIndex(Contacts.HAS_PHONE_NUMBER))) != 0) {
@@ -74,8 +92,9 @@ public abstract class GroupActivity extends Activity {
 								null);
 						if (phoneCursor.moveToFirst()) {
 							phone = phoneCursor.getString(phoneCursor
-									.getColumnIndex(Phone.NUMBER));
+									.getColumnIndexOrThrow(Phone.NUMBER));
 						}
+						phoneCursor.close();
 					}
 
 					String email = "";
@@ -85,8 +104,10 @@ public abstract class GroupActivity extends Activity {
 						email = emailCursor.getString(emailCursor
 								.getColumnIndexOrThrow(Email.DATA));
 					}
+					emailCursor.close();
 					populateContact(name, phone, email);
 				}
+				c.close();
 			}
 		}
 	}
