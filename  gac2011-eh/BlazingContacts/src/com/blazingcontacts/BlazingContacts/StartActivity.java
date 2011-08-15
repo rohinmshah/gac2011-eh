@@ -58,9 +58,9 @@ public class StartActivity extends GroupActivity {
 		// Initialize the values for each of the views to whatever was held
 		// previously, or the default if there was no previous value.
 		SharedPreferences data = getSharedPreferences(
-				getString(R.string.start_preference), MODE_PRIVATE);
-		start_group_name.setText(data.getString(
-				getString(R.string.start_group_name), ""));
+				getString(R.string.preference), MODE_PRIVATE);
+		start_group_name.setText(data.getString(getString(R.string.group_name),
+				""));
 		start_time.setText(data.getString(
 				getString(R.string.start_time_to_wait), "2"));
 		start_time_units.setSelection(data.getInt(
@@ -68,16 +68,16 @@ public class StartActivity extends GroupActivity {
 		start_max_people.setText(data.getString(
 				getString(R.string.start_max_people), ""));
 
-		start_name.setText(data.getString(
-				getString(R.string.start_contact_name), ""));
+		start_name
+				.setText(data.getString(getString(R.string.contact_name), ""));
 		start_phone.setChecked(data.getBoolean(
-				getString(R.string.start_phone_checked), true));
-		start_phone.setText(data.getString(
-				getString(R.string.start_contact_phone), ""));
+				getString(R.string.phone_checked), false));
+		start_phone.setText(data.getString(getString(R.string.contact_phone),
+				""));
 		start_email.setChecked(data.getBoolean(
-				getString(R.string.start_email_checked), true));
-		start_email.setText(data.getString(
-				getString(R.string.start_contact_email), ""));
+				getString(R.string.email_checked), false));
+		start_email.setText(data.getString(getString(R.string.contact_email),
+				""));
 		startClicked = false;
 
 		// Create the method that will be called when the start button is
@@ -91,25 +91,6 @@ public class StartActivity extends GroupActivity {
 			 */
 			public void onClick(View v) {
 				startClicked = true;
-
-				// Now that the start button has been clicked, the data can be
-				// thought of as final. So, the data is added to the joinData so
-				// that the join screen will also be populated by this
-				// information when it is opened.
-				SharedPreferences joinData = getSharedPreferences(
-						getString(R.string.join_preference), MODE_PRIVATE);
-				Editor e = joinData.edit();
-				e.putString(getString(R.string.join_contact_name), start_name
-						.getText().toString());
-				e.putBoolean(getString(R.string.join_phone_checked),
-						start_phone.isChecked());
-				e.putString(getString(R.string.join_contact_phone), start_phone
-						.getText().toString());
-				e.putBoolean(getString(R.string.join_email_checked),
-						start_email.isChecked());
-				e.putString(getString(R.string.join_contact_email), start_email
-						.getText().toString());
-				e.commit();
 
 				// Create an intent to start the service that will create the
 				// group and download the contacts, and put in the necessary
@@ -175,22 +156,19 @@ public class StartActivity extends GroupActivity {
 
 		// Save the data that has been put in the views.
 		SharedPreferences data = getSharedPreferences(
-				getString(R.string.start_preference), MODE_PRIVATE);
+				getString(R.string.preference), MODE_PRIVATE);
 		Editor e = data.edit();
-		e.clear();
-		e.putString(getString(R.string.start_contact_name), start_name
-				.getText().toString());
-		e.putBoolean(getString(R.string.start_phone_checked),
-				start_phone.isChecked());
-		e.putString(getString(R.string.start_contact_phone), start_phone
-				.getText().toString());
-		e.putBoolean(getString(R.string.start_email_checked),
-				start_email.isChecked());
-		e.putString(getString(R.string.start_contact_email), start_email
-				.getText().toString());
+		e.putString(getString(R.string.contact_name), start_name.getText()
+				.toString());
+		e.putBoolean(getString(R.string.phone_checked), start_phone.isChecked());
+		e.putString(getString(R.string.contact_phone), start_phone.getText()
+				.toString());
+		e.putBoolean(getString(R.string.email_checked), start_email.isChecked());
+		e.putString(getString(R.string.contact_email), start_email.getText()
+				.toString());
 		// Some data should only be kept if the group was not created.
 		if (!startClicked) {
-			e.putString(getString(R.string.start_group_name), start_group_name
+			e.putString(getString(R.string.group_name), start_group_name
 					.getText().toString());
 			e.putString(getString(R.string.start_time_to_wait), start_time
 					.getText().toString());
@@ -226,7 +204,10 @@ public class StartActivity extends GroupActivity {
 	protected void populateContact(String name, String phoneNumber, String email) {
 		start_name.setText(name);
 		start_phone.setText(phoneNumber);
+		start_phone
+				.setChecked(!(phoneNumber == null || phoneNumber.equals("")));
 		start_email.setText(email);
+		start_email.setChecked(!(email == null || email.equals("")));
 		start_begin.setVisibility(Button.VISIBLE);
 	}
 }
