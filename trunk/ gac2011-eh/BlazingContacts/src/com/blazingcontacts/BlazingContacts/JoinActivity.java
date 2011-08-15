@@ -40,19 +40,18 @@ public class JoinActivity extends GroupActivity {
 		// Initialize the values for each of the views to whatever was held
 		// previously, or the default if there was no previous value.
 		SharedPreferences data = getSharedPreferences(
-				getString(R.string.join_preference), MODE_PRIVATE);
-		join_group_name.setText(data.getString(
-				getString(R.string.join_group_name), ""));
-		join_name.setText(data.getString(getString(R.string.join_contact_name),
+				getString(R.string.preference), MODE_PRIVATE);
+		join_group_name.setText(data.getString(getString(R.string.group_name),
 				""));
+		join_name.setText(data.getString(getString(R.string.contact_name), ""));
 		join_phone.setChecked(data.getBoolean(
-				getString(R.string.join_phone_checked), true));
-		join_phone.setText(data.getString(
-				getString(R.string.join_contact_phone), ""));
+				getString(R.string.phone_checked), false));
+		join_phone.setText(data
+				.getString(getString(R.string.contact_phone), ""));
 		join_email.setChecked(data.getBoolean(
-				getString(R.string.join_email_checked), true));
-		join_email.setText(data.getString(
-				getString(R.string.join_contact_email), ""));
+				getString(R.string.email_checked), false));
+		join_email.setText(data
+				.getString(getString(R.string.contact_email), ""));
 		joinClicked = false;
 
 		// Create the method that will be called when the join button is
@@ -66,10 +65,6 @@ public class JoinActivity extends GroupActivity {
 			 */
 			public void onClick(View v) {
 				joinClicked = true;
-
-				// TO DO: Put the data into the SharedPreferences startData (see
-				// corresponding method in StartActivity. Better would be to
-				// redesign the whole thing - see readme.
 
 				// Create an intent to start the service that will join the
 				// group and download the contacts, and put in the necessary
@@ -104,21 +99,18 @@ public class JoinActivity extends GroupActivity {
 
 		// Save the data that has been put into the views.
 		SharedPreferences data = getSharedPreferences(
-				getString(R.string.join_preference), MODE_PRIVATE);
+				getString(R.string.preference), MODE_PRIVATE);
 		Editor e = data.edit();
-		e.clear();
-		e.putString(getString(R.string.join_contact_name), join_name.getText()
+		e.putString(getString(R.string.contact_name), join_name.getText()
 				.toString());
-		e.putBoolean(getString(R.string.join_phone_checked),
-				join_phone.isChecked());
-		e.putString(getString(R.string.join_contact_phone), join_phone
-				.getText().toString());
-		e.putBoolean(getString(R.string.join_email_checked),
-				join_email.isChecked());
-		e.putString(getString(R.string.join_contact_email), join_email
-				.getText().toString());
+		e.putBoolean(getString(R.string.phone_checked), join_phone.isChecked());
+		e.putString(getString(R.string.contact_phone), join_phone.getText()
+				.toString());
+		e.putBoolean(getString(R.string.email_checked), join_email.isChecked());
+		e.putString(getString(R.string.contact_email), join_email.getText()
+				.toString());
 		if (!joinClicked) {
-			e.putString(getString(R.string.join_group_name), join_group_name
+			e.putString(getString(R.string.group_name), join_group_name
 					.getText().toString());
 		}
 		e.commit();
@@ -148,7 +140,9 @@ public class JoinActivity extends GroupActivity {
 	protected void populateContact(String name, String phoneNumber, String email) {
 		join_name.setText(name);
 		join_phone.setText(phoneNumber);
+		join_phone.setChecked(!(phoneNumber == null || phoneNumber.equals("")));
 		join_email.setText(email);
+		join_email.setChecked(!(email == null || email.equals("")));
 		join_begin.setVisibility(Button.VISIBLE);
 	}
 }
