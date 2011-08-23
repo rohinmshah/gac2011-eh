@@ -29,14 +29,16 @@ public class ContactsProviderWrapper {
 	}
 
 	/**
-	 * Adds a new contact to the system's collection of contact information
+	 * Adds the new contact to Contacts. Returns true if a new contact was
+	 * added, and false if one was updated.
 	 * 
 	 * @param newContact
-	 *            Structure containing the new contact information
+	 *            - Structure containing the new contact information.
+	 * @return - true if a contact was added, false if it was updated.
 	 * @throws OperationApplicationException
 	 * @throws RemoteException
 	 */
-	public void addContact(Contact newContact)
+	public boolean addContact(Contact newContact)
 			throws OperationApplicationException, RemoteException {
 		// First, see if the contact already exists, by searching for any
 		// contacts with the same display name.
@@ -51,7 +53,8 @@ public class ContactsProviderWrapper {
 			// display name. So, update the phone number and email.
 			Log.i("addContact", "Contact already exists");
 			if (!newContact.hasPhoneNumber() && !newContact.hasEmail()) {
-				return;
+				contacts.close();
+				return false;
 			}
 
 			where = Data.DISPLAY_NAME + " = ? AND " + Data.MIMETYPE + " = ?";
@@ -79,6 +82,8 @@ public class ContactsProviderWrapper {
 				mContext.getContentResolver().applyBatch(
 						ContactsContract.AUTHORITY, ops);
 			}
+			contacts.close();
+			return false;
 		} else {
 			// Create a new entry in the contacts database
 
@@ -112,7 +117,8 @@ public class ContactsProviderWrapper {
 
 			mContext.getContentResolver().applyBatch(
 					ContactsContract.AUTHORITY, ops);
+			contacts.close();
+			return true;
 		}
-		contacts.close();
 	}
 }
