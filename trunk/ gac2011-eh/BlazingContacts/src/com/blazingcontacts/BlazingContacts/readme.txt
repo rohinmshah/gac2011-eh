@@ -9,9 +9,11 @@ Things to think about for the app:
 10. Help buttons - Put a help button next to each View explaining the purpose of that view.
 11. Options - Create OptionsActivity where the user can set options.
 11a.	Option 1: Suppose there is already a contact with the same name as the contact which is about to be added.  Should that contact be updated, or should a new contact be inserted?
+11b.    Option 2: Whether or not to use the WakeLock and WifiLock.
 12. AsyncTask - Fix publishProgress so that the "Finished!" notification has the number of added contacts and the number of updated contacts.
 13. WebWrapper - There are a bunch of warnings and to dos.
 14. Add a button which allows the user to select more contacts to share with others (possibly upto a maximum).
+15. Create a LogActivity which keeps a log of changes to contacts.  The only button it should have is a clear button.
 
 Done:
 3.  Start and Join Activities - If there is no phone number / email, uncheck the box.

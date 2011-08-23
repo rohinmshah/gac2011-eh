@@ -31,9 +31,8 @@ public class ContactDownloadAsyncTask extends
 	private NotificationManager mManager;
 	private int mType;
 	private Toast errorToast;
-	private String userName;
-	private String userPhone;
-	private String userEmail;
+	private String userName, userPhone, userEmail;
+	private int numAdded = 0, numUpdated = 0;
 
 	/**
 	 * Creates a new AsyncTask with a notification and a ContactDownloadService.
@@ -149,7 +148,11 @@ public class ContactDownloadAsyncTask extends
 							mService.getApplicationContext(), 0);
 					for (Contact contactToAdd : contactsToAdd) {
 						if (!isUser(contactToAdd)) {
-							cpw.addContact(contactToAdd);
+							if (cpw.addContact(contactToAdd)) {
+								numAdded++;
+							} else {
+								numUpdated++;
+							}
 						}
 					}
 					publishProgress(mStatus);
@@ -224,10 +227,10 @@ public class ContactDownloadAsyncTask extends
 				mService.getApplicationContext(), 0, notificationIntent, 0);
 		if (values[0].isFinished()) {
 			contentTitle = "Finished!";
-			contentText = (values[0].getMemberCount() - 1)
-					+ " contacts were added to your Contacts";
+			contentText = numAdded + " contacts were added and " + numUpdated
+					+ " were updated.";
 			Toast.makeText(mService.getApplicationContext(),
-					"Finished! " + contentText, Toast.LENGTH_LONG).show();
+					contentTitle + " " + contentText, Toast.LENGTH_LONG).show();
 		} else {
 
 			long seconds = values[0].getRemainingTime().getTime() / 1000;
